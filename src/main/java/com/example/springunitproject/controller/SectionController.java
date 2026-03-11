@@ -1,8 +1,8 @@
 package com.example.springunitproject.controller;
 
-import com.example.springunitproject.dto.SectionDto;
+import com.example.springunitproject.dto.SectionDTO;
+import com.example.springunitproject.entities.Section;
 import com.example.springunitproject.service.SectionService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,24 +18,24 @@ public class SectionController {
         this.sectionService = sectionService;
     }
 
-    @GetMapping
-    public List<SectionDto> getAllSections() {
-        return sectionService.findAllSections();
+    @PostMapping
+    public ResponseEntity<SectionDTO> createSection(@RequestBody Section section, @RequestParam Long projectId) {
+        return ResponseEntity.ok(sectionService.createSection(section, projectId));
     }
 
     @GetMapping("/{id}")
-    public SectionDto getSectionById(@PathVariable Long id) {
-        return sectionService.findSectionById(id);
+    public ResponseEntity<SectionDTO> getSectionById(@PathVariable Long id) {
+        return ResponseEntity.ok(sectionService.getSectionById(id));
     }
 
-    @PostMapping
-    public ResponseEntity<SectionDto> createSection(@RequestBody SectionDto sectionDto) {
-        return new ResponseEntity<>(sectionService.createSection(sectionDto), HttpStatus.CREATED);
+    @GetMapping("/project/{projectId}")
+    public ResponseEntity<List<SectionDTO>> getAllSectionsByProject(@PathVariable Long projectId) {
+        return ResponseEntity.ok(sectionService.getAllSectionsByProject(projectId));
     }
 
     @PutMapping("/{id}")
-    public SectionDto updateSection(@PathVariable Long id, @RequestBody SectionDto sectionDto) {
-        return sectionService.updateSection(id, sectionDto);
+    public ResponseEntity<SectionDTO> updateSection(@PathVariable Long id, @RequestBody Section sectionDetails) {
+        return ResponseEntity.ok(sectionService.updateSection(id, sectionDetails));
     }
 
     @DeleteMapping("/{id}")

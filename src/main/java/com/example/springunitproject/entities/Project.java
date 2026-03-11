@@ -1,4 +1,4 @@
-package com.example.unitprojectspring.Entities;
+package com.example.springunitproject.entities;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
@@ -18,12 +18,10 @@ public class Project {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    // Assuming you have a User entity created for authentication
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // A Project has many Sections.
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
@@ -34,7 +32,6 @@ public class Project {
         this.description = description;
     }
 
-    // --- Dynamic Overall Completion Calculation ---
     @Transient
     public int getCompletionPercentage() {
         if (sections == null || sections.isEmpty()) {
@@ -59,7 +56,6 @@ public class Project {
         return (int) Math.round((completedTasks * 100.0) / totalTasks);
     }
 
-    // Helper method to keep relationships in sync
     public void addSection(Section section) {
         sections.add(section);
         section.setProject(this);
@@ -70,7 +66,6 @@ public class Project {
         section.setProject(null);
     }
 
-    // --- Getters and Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

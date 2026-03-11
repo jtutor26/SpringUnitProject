@@ -1,8 +1,8 @@
-package com.example.unitprojectspring.Controllers;
+package com.example.springunitproject.controller;
 
-import com.example.unitprojectspring.DTO.ProjectDTO;
-import com.example.unitprojectspring.Entities.Project;
-import com.example.unitprojectspring.Service.ProjectService;
+import com.example.springunitproject.dto.ProjectDTO;
+import com.example.springunitproject.entities.Project;
+import com.example.springunitproject.service.ProjectService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

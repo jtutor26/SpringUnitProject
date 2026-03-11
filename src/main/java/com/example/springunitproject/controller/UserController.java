@@ -1,8 +1,8 @@
-package com.example.unitprojectspring.Controllers;
+package com.example.springunitproject.controller;
 
-import com.example.unitprojectspring.DTO.UserDTO;
-import com.example.unitprojectspring.DTO.UserRegistrationDTO;
-import com.example.unitprojectspring.Service.UserService;
+import com.example.springunitproject.dto.UserDTO;
+import com.example.springunitproject.dto.UserRegistrationDTO;
+import com.example.springunitproject.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

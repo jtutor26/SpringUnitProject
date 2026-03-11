@@ -1,6 +1,7 @@
-package com.example.unitprojectspring.Service;
-import com.example.unitprojectspring.Entities.User;
-import com.example.unitprojectspring.Repositories.UserRepository;
+package com.example.springunitproject.service;
+
+import com.example.springunitproject.entities.User;
+import com.example.springunitproject.repositories.UserRepository;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,8 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String loginInput) throws UsernameNotFoundException {
-
-        // Pass the input into both the username and email parameters
         User user = userRepository.findByUsernameOrEmail(loginInput, loginInput)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username/email: " + loginInput));
 
@@ -32,6 +31,4 @@ public class CustomUserDetailsService implements UserDetailsService {
                 new ArrayList<>()
         );
     }
-
-    //DO NOT ADD TO THIS, ONLY FOR LOGIN
 }

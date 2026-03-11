@@ -1,14 +1,12 @@
 package com.example.springunitproject.service;
 
-import com.example.springunitproject.dto.ProjectDto;
+import com.example.springunitproject.dto.ProjectDTO;
+import com.example.springunitproject.entities.Project;
+import com.example.springunitproject.entities.User;
+import com.example.springunitproject.repositories.ProjectRepository;
+import com.example.springunitproject.repositories.UserRepository;
 import com.example.springunitproject.exception.ResourceNotFoundException;
-import com.example.springunitproject.model.Project;
-import com.example.springunitproject.model.Section;
-import com.example.springunitproject.model.User;
-import com.example.springunitproject.repository.ProjectRepository;
-import com.example.springunitproject.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,51 +22,57 @@ public class ProjectService {
         this.userRepository = userRepository;
     }
 
-    public List<ProjectDto> findAllProjects() {
+    public ProjectDTO createProject(Project project, Long user_id) {
+        Project savedProject = projectRepository.save(project);
+
+        if (user_id != null) {
+            java.util.Optional<User> userOpt = userRepository.findById(user_id);
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
+
+                user.addProject(savedProject);
+
+                userRepository.save(user);
+            }
+        }
+
+        return convertToDto(savedProject);
+    }
+
+    public ProjectDTO getProjectById(Long id) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+        return convertToDto(project);
+    }
+
+    public List<ProjectDTO> getAllProjects() {
         return projectRepository.findAll().stream()
-                .map(this::mapToDto)
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
-    public ProjectDto findProjectById(Long id) {
-        return projectRepository.findById(id)
-                .map(this::mapToDto)
-                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id: " + id));
-    }
-
-    @Transactional
-    public ProjectDto createProject(ProjectDto projectDto) {
-        User user = userRepository.findById(projectDto.userId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + projectDto.userId()));
-        Project project = new Project(projectDto.name(), projectDto.description());
-        user.addProject(project);
-        return mapToDto(projectRepository.save(project));
-    }
-
-    @Transactional
-    public ProjectDto updateProject(Long id, ProjectDto projectDto) {
+    public ProjectDTO updateProject(Long id, Project projectDetails) {
         Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id: " + id));
-        project.setName(projectDto.name());
-        project.setDescription(projectDto.description());
-        return mapToDto(projectRepository.save(project));
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+        project.setTitle(projectDetails.getTitle());
+        project.setDescription(projectDetails.getDescription());
+        Project updatedProject = projectRepository.save(project);
+        return convertToDto(updatedProject);
     }
 
-    @Transactional
     public void deleteProject(Long id) {
         if (!projectRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Project not found with id: " + id);
+            throw new ResourceNotFoundException("Project not found");
         }
         projectRepository.deleteById(id);
     }
 
-    private ProjectDto mapToDto(Project project) {
-        return new ProjectDto(
-                project.getId(),
-                project.getName(),
-                project.getDescription(),
-                project.getOwner() != null ? project.getOwner().getId() : null,
-                project.getSections().stream().map(Section::getId).collect(Collectors.toList())
-        );
+    private ProjectDTO convertToDto(Project projectEntity) {
+        ProjectDTO dto = new ProjectDTO();
+        dto.setId(projectEntity.getId());
+        dto.setTitle(projectEntity.getTitle());
+        dto.setDescription(projectEntity.getDescription());
+        dto.setCompletionPercentage(projectEntity.getCompletionPercentage());
+        return dto;
     }
 }

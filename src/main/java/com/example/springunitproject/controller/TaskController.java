@@ -1,8 +1,8 @@
 package com.example.springunitproject.controller;
 
-import com.example.springunitproject.dto.TaskDto;
+import com.example.springunitproject.dto.TaskDTO;
+import com.example.springunitproject.entities.Task;
 import com.example.springunitproject.service.TaskService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,24 +18,29 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping
-    public List<TaskDto> getAllTasks() {
-        return taskService.findAllTasks();
+    @PostMapping
+    public ResponseEntity<TaskDTO> createTask(@RequestBody Task task, @RequestParam Long sectionId) {
+        return ResponseEntity.ok(taskService.createTask(task, sectionId));
     }
 
     @GetMapping("/{id}")
-    public TaskDto getTaskById(@PathVariable Long id) {
-        return taskService.findTaskById(id);
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
+        return ResponseEntity.ok(taskService.getTaskById(id));
     }
 
-    @PostMapping
-    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto) {
-        return new ResponseEntity<>(taskService.createTask(taskDto), HttpStatus.CREATED);
+    @GetMapping("/section/{sectionId}")
+    public ResponseEntity<List<TaskDTO>> getAllTasksBySection(@PathVariable Long sectionId) {
+        return ResponseEntity.ok(taskService.getAllTasksBySection(sectionId));
     }
 
     @PutMapping("/{id}")
-    public TaskDto updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
-        return taskService.updateTask(id, taskDto);
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @RequestBody Task taskDetails) {
+        return ResponseEntity.ok(taskService.updateTask(id, taskDetails));
+    }
+
+    @PatchMapping("/{id}/toggle")
+    public ResponseEntity<TaskDTO> toggleTaskCompletion(@PathVariable Long id) {
+        return ResponseEntity.ok(taskService.toggleTaskCompletion(id));
     }
 
     @DeleteMapping("/{id}")
