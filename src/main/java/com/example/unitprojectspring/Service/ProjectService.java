@@ -8,7 +8,9 @@ import com.example.unitprojectspring.Repositories.ProjectRepository;
 import com.example.unitprojectspring.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -43,6 +45,12 @@ public class ProjectService {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
         return convertToDto(project);
+    }
+
+    public List<ProjectDTO> getAllProjectsWithUserId(Long userId) {
+        return projectRepository.findByUserId(userId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     public ProjectDTO updateProject(Long id, Project projectDetails) {

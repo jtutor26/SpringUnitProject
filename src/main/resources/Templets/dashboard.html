@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+<div class="container mx-auto p-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">My Projects</h1>
+        <div th:if="${param.error}" class="text-red-500 font-semibold">
+            Unauthorized action.
+        </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Add New Project</h2>
+        <form th:action="@{/api/dashboard/add}" method="POST" class="flex flex-wrap gap-4">
+            <input type="text" name="name" placeholder="Project Name" required
+                   class="flex-1 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <input type="text" name="description" placeholder="Short Description"
+                   class="flex-1 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded transition duration-200">
+                Add Project
+            </button>
+        </form>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <table class="min-w-full bg-white">
+            <thead class="bg-gray-800 text-white">
+            <tr>
+                <th class="py-3 px-6 text-left uppercase font-semibold text-sm">ID</th>
+                <th class="py-3 px-6 text-left uppercase font-semibold text-sm">Project Name</th>
+                <th class="py-3 px-6 text-left uppercase font-semibold text-sm">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="text-gray-700">
+            <tr th:if="${projects.empty}">
+                <td colspan="3" class="py-4 text-center text-gray-500 italic">No projects found. Start by adding one!</td>
+            </tr>
+            <tr th:each="project : ${projects}" class="border-b hover:bg-gray-50">
+                <td class="py-3 px-6" th:text="${project.id}">1</td>
+                <td class="py-3 px-6 font-medium" th:text="${project.name}">Project Alpha</td>
+                <td class="py-3 px-6">
+                    <form th:action="@{/api/dashboard/{id}/delete(id=${project.id})}" method="POST" onsubmit="return confirm('Delete this project?');">
+                        <button type="submit" class="text-red-600 hover:text-red-900 font-semibold">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
