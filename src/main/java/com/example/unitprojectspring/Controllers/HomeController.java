@@ -43,6 +43,7 @@ public class HomeController {
         String username = principal.getName();
         User currentuser = userRepository.findByUsernameOrEmail(username, username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
         ProjectDTO projecttodelete = projectService.getProjectById(project_id);
 
         if (!projecttodelete.getUserId().equals(currentuser.getId())) {
