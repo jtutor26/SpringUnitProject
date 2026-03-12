@@ -1,4 +1,6 @@
 package com.example.unitprojectspring.Controllers;
 
-public class ProjectController {
+
+public class AuthController {
+
 }
