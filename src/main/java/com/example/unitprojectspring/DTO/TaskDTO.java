@@ -2,6 +2,7 @@ package com.example.unitprojectspring.DTO;
 
 public class TaskDTO {
     private Long id;
+    private Long sectionId;
     private String title;
     private String description;
     private boolean isCompleted;
@@ -19,6 +20,9 @@ public class TaskDTO {
     // --- Getters and Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public Long getSectionId() { return sectionId; }
+    public void setSectionId(Long sectionId) { this.sectionId = sectionId; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }

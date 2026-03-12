@@ -6,6 +6,7 @@ import java.util.List;
 
 public class ProjectDTO {
     private Long id;
+    private Long userId;
     private String title;
     private String description;
     private int completionPercentage; // Calculated overall progress
@@ -16,6 +17,9 @@ public class ProjectDTO {
     // --- Getters and Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public Long getUserId() { return userId; } // <-- 2. Add getter
+    public void setUserId(Long userId) { this.userId = userId; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }

@@ -24,20 +24,41 @@ public class ProjectService {
     }
 
     public ProjectDTO createProject(Project project, Long user_id) {
-        Project savedProject = projectRepository.save(project);
 
-        if (user_id != null) {
-            Optional<User> userOpt = userRepository.findById(user_id);
-            if (userOpt.isPresent()) {
-                User user = userOpt.get();
-
-                user.addProject(savedProject);
-
-                userRepository.save(user);
-            }
+        if (user_id == null) {
+            throw new IllegalArgumentException("A Project must belong to a User.");
         }
 
+        User user = userRepository.findById(user_id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        project.setUser(user);
+
+        Project savedProject = projectRepository.save(project);
+
         return convertToDto(savedProject);
+    }
+
+    public ProjectDTO getProjectById(Long id) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+        return convertToDto(project);
+    }
+
+    public ProjectDTO updateProject(Long id, Project projectDetails) {
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+        project.setTitle(projectDetails.getTitle());
+        project.setDescription(projectDetails.getDescription());
+        Project updatedProject = projectRepository.save(project);
+        return convertToDto(updatedProject);
+    }
+
+    public void deleteProject(Long id) {
+        if (!projectRepository.existsById(id)) {
+            throw new RuntimeException("Project not found");
+        }
+        projectRepository.deleteById(id);
     }
 
     private ProjectDTO convertToDto(Project projectEntity) {
@@ -46,6 +67,10 @@ public class ProjectService {
         dto.setTitle(projectEntity.getTitle());
         dto.setDescription(projectEntity.getDescription());
         dto.setCompletionPercentage(projectEntity.getCompletionPercentage());
+
+        if (projectEntity.getUser() != null) {
+            dto.setUserId(projectEntity.getUser().getId());
+        }
         return dto;
     }
 }
