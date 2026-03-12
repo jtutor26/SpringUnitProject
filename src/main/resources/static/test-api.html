@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Tester - User & Task Controllers</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; line-height: 1.6; }
+        .section { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        h2 { margin-top: 0; }
+        .endpoint { background: #f4f4f4; padding: 10px; margin-bottom: 10px; border-left: 5px solid #007bff; }
+        label { display: block; margin-top: 5px; font-weight: bold; }
+        input, textarea { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+        button { background: #007bff; color: white; border: none; padding: 10px 15px; cursor: pointer; margin-top: 10px; border-radius: 3px; }
+        button:hover { background: #0056b3; }
+        pre { background: #333; color: #fff; padding: 10px; overflow-x: auto; border-radius: 3px; min-height: 50px; }
+        .method { font-weight: bold; color: #d63384; }
+        .url { font-family: monospace; }
+        .warning { background: #fff3cd; color: #856404; padding: 10px; border: 1px solid #ffeeba; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>API Tester</h1>
+    <div class="warning">
+        <strong>Note:</strong> Most endpoints require authentication. Make sure you are logged in or have disabled CSRF/Auth for testing.
+    </div>
+
+    <div class="section">
+        <h2>User Controller</h2>
+        
+        <div class="endpoint">
+            <span class="method">GET</span> <span class="url">/users/all</span>
+            <button onclick="apiRequest('/users/all', 'GET')">Get All Users</button>
+        </div>
+
+        <div class="endpoint">
+            <span class="method">GET</span> <span class="url">/users/{id}</span>
+            <label>User ID:</label>
+            <input type="number" id="userIdGet" placeholder="1">
+            <button onclick="apiRequest('/users/' + document.getElementById('userIdGet').value, 'GET')">Get User By ID</button>
+        </div>
+
+        <div class="endpoint">
+            <span class="method">PUT</span> <span class="url">/users/{id}/update</span>
+            <label>User ID:</label>
+            <input type="number" id="userIdUpdate" placeholder="1">
+            <label>Username:</label>
+            <input type="text" id="userUsername" placeholder="newUsername">
+            <label>Email:</label>
+            <input type="email" id="userEmail" placeholder="new@email.com">
+            <label>Password:</label>
+            <input type="password" id="userPassword" placeholder="newPassword">
+            <button onclick="updateUser()">Update User</button>
+        </div>
+
+        <div class="endpoint">
+            <span class="method">DELETE</span> <span class="url">/users/{id}/delete</span>
+            <label>User ID:</label>
+            <input type="number" id="userIdDelete" placeholder="1">
+            <button onclick="apiRequest('/users/' + document.getElementById('userIdDelete').value + '/delete', 'DELETE')">Delete User</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Task Controller</h2>
+
+        <div class="endpoint">
+            <span class="method">POST</span> <span class="url">/tasks/section/{sectionId}</span>
+            <label>Section ID:</label>
+            <input type="number" id="taskSectionId" placeholder="1">
+            <label>Title:</label>
+            <input type="text" id="taskTitle" placeholder="Task Title">
+            <label>Description:</label>
+            <textarea id="taskDescription" placeholder="Task Description"></textarea>
+            <button onclick="createTask()">Create Task</button>
+        </div>
+
+        <div class="endpoint">
+            <span class="method">GET</span> <span class="url">/tasks/{id}</span>
+            <label>Task ID:</label>
+            <input type="number" id="taskIdGet" placeholder="1">
+            <button onclick="apiRequest('/tasks/' + document.getElementById('taskIdGet').value, 'GET')">Get Task By ID</button>
+        </div>
+
+        <div class="endpoint">
+            <span class="method">GET</span> <span class="url">/tasks/{section}</span>
+            <label>Section ID:</label>
+            <input type="number" id="taskSectionGet" placeholder="1">
+            <button onclick="apiRequest('/tasks/' + document.getElementById('taskSectionGet').value, 'GET')">Get Tasks By Section</button>
+        </div>
+
+        <div class="endpoint">
+            <span class="method">PUT</span> <span class="url">/tasks/{id}/update</span>
+            <label>Task ID:</label>
+            <input type="number" id="taskIdUpdate" placeholder="1">
+            <label>Title:</label>
+            <input type="text" id="taskTitleUpdate" placeholder="Updated Title">
+            <label>Description:</label>
+            <textarea id="taskDescriptionUpdate" placeholder="Updated Description"></textarea>
+            <label>Completed:</label>
+            <input type="checkbox" id="taskCompletedUpdate">
+            <button onclick="updateTask()">Update Task</button>
+        </div>
+
+        <div class="endpoint">
+            <span class="method">PATCH</span> <span class="url">/tasks/{id}/toggle</span>
+            <label>Task ID:</label>
+            <input type="number" id="taskIdToggle" placeholder="1">
+            <button onclick="apiRequest('/tasks/' + document.getElementById('taskIdToggle').value + '/toggle', 'PATCH')">Toggle Completion</button>
+        </div>
+
+        <div class="endpoint">
+            <span class="method">DELETE</span> <span class="url">/tasks/{id}/delete</span>
+            <label>Task ID:</label>
+            <input type="number" id="taskIdDelete" placeholder="1">
+            <button onclick="apiRequest('/tasks/' + document.getElementById('taskIdDelete').value + '/delete', 'DELETE')">Delete Task</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Response Output</h2>
+        <pre id="output">Results will appear here...</pre>
+    </div>
+
+    <script>
+        async function apiRequest(url, method, body = null) {
+            const output = document.getElementById('output');
+            output.innerText = 'Loading...';
+            
+            const options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            
+            if (body) {
+                options.body = JSON.stringify(body);
+            }
+
+            try {
+                const response = await fetch(url, options);
+                const statusText = `Status: ${response.status} ${response.statusText}\n\n`;
+                
+                if (response.ok) {
+                    const contentType = response.headers.get("content-type");
+                    if (contentType && contentType.includes("application/json")) {
+                        const data = await response.json();
+                        output.innerText = statusText + JSON.stringify(data, null, 2);
+                    } else {
+                        const text = await response.text();
+                        output.innerText = statusText + (text || "Success (No content)");
+                    }
+                } else {
+                    const errorText = await response.text();
+                    output.innerText = statusText + errorText;
+                }
+            } catch (error) {
+                output.innerText = 'Error: ' + error.message;
+            }
+        }
+
+        function updateUser() {
+            const id = document.getElementById('userIdUpdate').value;
+            const body = {
+                username: document.getElementById('userUsername').value,
+                email: document.getElementById('userEmail').value,
+                password: document.getElementById('userPassword').value
+            };
+            apiRequest(`/users/${id}/update`, 'PUT', body);
+        }
+
+        function createTask() {
+            const sectionId = document.getElementById('taskSectionId').value;
+            const body = {
+                title: document.getElementById('taskTitle').value,
+                description: document.getElementById('taskDescription').value
+            };
+            apiRequest(`/tasks/section/${sectionId}`, 'POST', body);
+        }
+
+        function updateTask() {
+            const id = document.getElementById('taskIdUpdate').value;
+            const body = {
+                title: document.getElementById('taskTitleUpdate').value,
+                description: document.getElementById('taskDescriptionUpdate').value,
+                completed: document.getElementById('taskCompletedUpdate').checked
+            };
+            apiRequest(`/tasks/${id}/update`, 'PUT', body);
+        }
+    </script>
+</body>
+</html>

@@ -22,7 +22,7 @@ public class SecurityConfig {
                 // 1. URL Authorization Rules
                 .authorizeHttpRequests(auth -> auth
                         // Allow public access to registration, login, and your static files (CSS/JS)
-                        .requestMatchers("/register", "/login", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/register", "/login", "/css/**", "/js/**", "/images/**", "/test-api.html").permitAll()
                         // Require the user to be logged in for absolutely every other request
                         .anyRequest().authenticated()
                 )
@@ -39,7 +39,8 @@ public class SecurityConfig {
                         .invalidateHttpSession(true) // Destroys their session
                         .deleteCookies("JSESSIONID")
                         .permitAll()
-                );
+                )
+                .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
