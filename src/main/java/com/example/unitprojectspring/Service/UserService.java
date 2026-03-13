@@ -51,6 +51,11 @@ public class UserService {
         return convertToDto(user);
     }
 
+    public User getUserFromPrincipal(String loginInput) {
+        return userRepository.findByUsernameOrEmail(loginInput, loginInput)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(this::convertToDto)

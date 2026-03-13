@@ -1,0 +1,23 @@
+<form th:action="@{/login}" method="POST">
+
+    <div>
+        <label for="username">Username or Email:</label>
+        <input type="text" id="username" name="username" required>
+    </div>
+
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+
+    <button type="submit">Log In</button>
+
+    <div th:if="${param.error}" style="color: red;">
+        Invalid username and password.
+    </div>
+
+    <div th:if="${param.logout}" style="color: green;">
+        You have been logged out.
+    </div>
+
+</form>

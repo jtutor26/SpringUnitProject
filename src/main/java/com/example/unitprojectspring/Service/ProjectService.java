@@ -1,14 +1,13 @@
 package com.example.unitprojectspring.Service;
 import com.example.unitprojectspring.DTO.ProjectDTO;
-import com.example.unitprojectspring.DTO.SectionDTO;
 import com.example.unitprojectspring.Entities.Project;
-import com.example.unitprojectspring.Entities.Section;
 import com.example.unitprojectspring.Entities.User;
 import com.example.unitprojectspring.Repositories.ProjectRepository;
 import com.example.unitprojectspring.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -43,6 +42,12 @@ public class ProjectService {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
         return convertToDto(project);
+    }
+
+    public List<ProjectDTO> getAllProjectsWithUserId(Long userId) {
+        return projectRepository.findByUserId(userId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     public ProjectDTO updateProject(Long id, Project projectDetails) {
