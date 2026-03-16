@@ -1,23 +1,76 @@
-<form th:action="@{/login}" method="POST">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - Junction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .rail-track {
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 15px, #292524 15px, #292524 20px);
+        }
+    </style>
+</head>
+<body class="bg-stone-300 min-h-screen flex items-center justify-center font-sans relative overflow-hidden">
 
-    <div>
-        <label for="username">Username or Email:</label>
-        <input type="text" id="username" name="username" required>
+<!-- Railroad background decoration -->
+<div class="absolute inset-0 z-0 flex justify-center opacity-20 pointer-events-none">
+    <div class="w-20 h-full border-x-8 border-stone-900 rail-track"></div>
+    <div class="w-64 h-full"></div>
+    <div class="w-20 h-full border-x-8 border-stone-900 rail-track"></div>
+</div>
+
+<div class="bg-stone-100 p-8 md:p-10 border-4 border-stone-900 shadow-[8px_8px_0px_0px_rgba(28,25,23,1)] w-full max-w-md relative z-10">
+    <div class="text-center mb-8 border-b-4 border-dashed border-stone-400 pb-6">
+        <div class="flex justify-center mb-4">
+            <svg class="w-16 h-16 text-orange-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 2v20" />
+                <path d="M17 2v20" />
+                <path d="M7 7h10" />
+                <path d="M7 12h10" />
+                <path d="M7 17h10" />
+            </svg>
+        </div>
+        <h2 class="text-4xl font-black text-stone-900 uppercase tracking-widest">Junc<span class="text-orange-600">tion</span></h2>
+        <p class="text-stone-600 mt-2 font-bold uppercase text-xs tracking-wider">Terminal Access</p>
     </div>
 
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+    <div th:if="${param.error}" class="bg-red-500 border-2 border-stone-900 text-white p-4 mb-6 font-bold shadow-[4px_4px_0_0_#1c1917]" role="alert">
+        <p class="uppercase tracking-wide text-xs">Connection Failed</p>
+        <p class="text-sm">Invalid credentials provided.</p>
     </div>
 
-    <button type="submit">Log In</button>
-
-    <div th:if="${param.error}" style="color: red;">
-        Invalid username and password.
+    <div th:if="${param.logout}" class="bg-orange-400 border-2 border-stone-900 text-stone-900 p-4 mb-6 font-bold shadow-[4px_4px_0_0_#1c1917]" role="alert">
+        <p class="uppercase tracking-wide text-xs">Disconnected</p>
+        <p class="text-sm">You have successfully departed.</p>
     </div>
 
-    <div th:if="${param.logout}" style="color: green;">
-        You have been logged out.
-    </div>
+    <form th:action="@{/login}" method="POST" class="space-y-6">
+        <div>
+            <label for="username" class="block text-xs font-black uppercase tracking-widest text-stone-800 mb-2">Operator ID (User/Email)</label>
+            <input type="text" id="username" name="username" required
+                   class="w-full px-4 py-3 border-2 border-stone-900 focus:outline-none focus:ring-4 focus:ring-orange-500 bg-white font-mono text-stone-900 shadow-inner" placeholder="Enter Operator ID">
+        </div>
 
-</form>
+        <div>
+            <label for="password" class="block text-xs font-black uppercase tracking-widest text-stone-800 mb-2">Passcode</label>
+            <input type="password" id="password" name="password" required
+                   class="w-full px-4 py-3 border-2 border-stone-900 focus:outline-none focus:ring-4 focus:ring-orange-500 bg-white font-mono text-stone-900 shadow-inner" placeholder="••••••••">
+        </div>
+
+        <button type="submit"
+                class="w-full flex justify-center py-4 border-2 border-stone-900 shadow-[4px_4px_0_0_#1c1917] text-sm font-black uppercase tracking-widest text-stone-900 bg-orange-500 hover:bg-orange-400 active:translate-y-1 active:translate-x-1 active:shadow-none transition-all">
+            Board Train
+        </button>
+    </form>
+
+    <div class="mt-8 text-center pt-6 border-t-4 border-dashed border-stone-400">
+        <p class="text-xs font-bold text-stone-600 uppercase tracking-wide">
+            No ticket?
+            <a th:href="@{/register}" class="font-black text-orange-600 hover:text-orange-700 underline decoration-2 underline-offset-4">Get one here</a>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

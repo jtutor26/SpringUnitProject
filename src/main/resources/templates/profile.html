@@ -3,65 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile</title>
+    <title>Operator Profile - Junction</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .rail-track {
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 15px, #333333 15px, #333333 20px);
+        }
+        /* Heavy Industrial Caution Tape using Junction Colors */
+        .caution-tape {
+            background: repeating-linear-gradient(
+                    -45deg,
+                    #FFC300,
+                    #FFC300 20px,
+                    #333333 20px,
+                    #333333 40px
+            );
+            height: 20px;
+            width: 100%;
+            border-top: 4px solid #333333;
+            border-bottom: 4px solid #333333;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+<body class="bg-stone-300 font-sans leading-normal tracking-normal min-h-screen flex flex-col overflow-x-hidden">
 
-<div class="container mx-auto p-8 max-w-2xl">
+<nav class="bg-[#333333] border-b-8 border-[#FF5733] relative overflow-hidden flex-shrink-0">
+    <div class="absolute inset-0 rail-track opacity-20 pointer-events-none border-y-4 border-[#333333] h-16 mt-0"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="flex justify-between h-20">
+            <div class="flex items-center">
+                <svg class="w-10 h-10 mr-3 text-[#FFC300]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 2v20" />
+                    <path d="M17 2v20" />
+                    <path d="M7 7h10" />
+                    <path d="M7 12h10" />
+                    <path d="M7 17h10" />
+                </svg>
+                <span class="text-3xl font-black text-white tracking-widest uppercase">Junc<span class="text-[#FFC300]">tion</span></span>
+            </div>
+            <div class="flex items-center">
+                <a th:href="@{/api/dashboard}" class="inline-flex items-center px-4 py-2 border-2 border-[#333333] text-xs font-black uppercase tracking-widest text-stone-100 bg-[#333333] hover:bg-stone-700 hover:border-[#FFC300] transition-colors shadow-[2px_2px_0_0_#1c1917] active:translate-y-px active:translate-x-px active:shadow-none">
+                    <svg class="w-4 h-4 mr-2 text-[#FFC300]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="square" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Yard Return
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
 
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">My Profile</h1>
-        <a th:href="@{/api/dashboard}" class="text-blue-600 hover:text-blue-800 font-semibold">
-            &larr; Back to Dashboard
-        </a>
+<div class="caution-tape shadow-[0_4px_0_0_#1c1917]"></div>
+
+<main class="container mx-auto p-4 sm:p-8 max-w-3xl py-12 flex-grow">
+
+    <div class="flex justify-between items-center mb-8 border-b-4 border-[#333333] pb-4">
+        <h1 class="text-4xl font-black text-[#333333] uppercase tracking-widest">Operator File</h1>
     </div>
 
-    <div th:if="${param.success}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6">
-        <span class="block sm:inline">Profile updated successfully!</span>
+    <div th:if="${param.success}" class="bg-[#333333] border-4 border-[#333333] text-[#FFC300] px-4 py-4 shadow-[4px_4px_0_0_#1c1917] mb-8 flex items-center font-black uppercase tracking-widest">
+        <svg class="w-6 h-6 mr-3 text-[#FF5733]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="square" stroke-linejoin="miter" d="M5 13l4 4L19 7"></path></svg>
+        <span>Manifest Updated Successfully!</span>
     </div>
 
-    <div class="bg-white p-8 rounded-lg shadow-md mb-8">
-        <h2 class="text-xl font-semibold text-gray-700 mb-6 border-b pb-2">Update Credentials</h2>
+    <div class="bg-[#FFC300] p-6 sm:p-8 border-4 border-[#333333] shadow-[8px_8px_0_0_#1c1917] mb-12 relative">
+        <div class="absolute top-0 right-0 w-8 h-8 border-b-4 border-l-4 border-[#333333]"></div>
+        <div class="absolute bottom-0 left-0 w-8 h-8 border-t-4 border-r-4 border-[#333333]"></div>
 
-        <form th:action="@{/users/profile/update}" th:object="${userDto}" method="POST">
+        <h2 class="text-xl font-black text-[#333333] mb-6 uppercase tracking-wider border-b-4 border-[#333333] pb-3 flex items-center">
+            <svg class="w-6 h-6 mr-3 text-[#333333]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="square" stroke-linejoin="miter" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            Update Credentials
+        </h2>
 
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+        <form th:action="@{/users/profile/update}" th:object="${userDto}" method="POST" class="space-y-6">
+
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-widest text-[#333333] mb-2">Operator ID</label>
                 <input type="text" th:field="*{username}" required
-                       class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+                       class="w-full border-2 border-[#333333] p-3 focus:outline-none focus:ring-4 focus:ring-[#FF5733] font-mono font-bold text-[#333333] shadow-inner bg-white">
             </div>
 
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-widest text-[#333333] mb-2">Dispatch Email</label>
                 <input type="email" th:field="*{email}" required
-                       class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+                       class="w-full border-2 border-[#333333] p-3 focus:outline-none focus:ring-4 focus:ring-[#FF5733] font-mono font-bold text-[#333333] shadow-inner bg-white">
             </div>
 
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Confirm / New Password</label>
-                <input type="password" th:field="*{password}" required placeholder="Enter password to save changes"
-                       class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <div class="bg-[#333333] p-6 border-4 border-[#333333] mt-8 shadow-inner relative">
+                <div class="absolute top-0 right-0 w-4 h-4 border-b-2 border-l-2 border-[#FFC300]"></div>
+
+                <label class="block text-sm font-black uppercase tracking-widest text-[#FFC300] mb-1">Verify Identity</label>
+                <p class="text-[10px] font-black tracking-widest uppercase text-[#FF5733] mb-4">Provide passcode to authorize modifications.</p>
+                <input type="password" th:field="*{password}" required placeholder="PASSCODE REQUIRED"
+                       class="w-full border-2 border-[#333333] p-3 focus:outline-none focus:ring-4 focus:ring-[#FF5733] font-mono font-bold text-[#333333] shadow-inner bg-white placeholder:text-stone-400">
             </div>
 
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded transition duration-200 w-full">
-                Save Changes
+            <button type="submit" class="mt-8 w-full flex justify-center py-4 border-2 border-[#333333] shadow-[4px_4px_0_0_#1c1917] text-sm font-black uppercase tracking-widest text-[#FFC300] bg-[#333333] hover:bg-[#1a1a1a] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all">
+                Save Adjustments
             </button>
         </form>
     </div>
 
-    <div class="bg-red-50 p-8 rounded-lg shadow-md border border-red-200">
-        <h2 class="text-xl font-semibold text-red-700 mb-2">Danger Zone</h2>
-        <p class="text-red-600 mb-6 text-sm">Once you delete your account, there is no going back. Please be certain.</p>
+    <div class="bg-red-600 p-6 sm:p-8 border-4 border-[#333333] shadow-[8px_8px_0_0_#1c1917] relative">
+        <h2 class="text-xl font-black text-white mb-2 uppercase tracking-wider flex items-center">
+            <svg class="w-6 h-6 mr-3 text-[#333333]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="square" stroke-linejoin="miter" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            Danger: Terminal Dismantle
+        </h2>
+        <p class="text-red-100 mb-6 font-mono font-bold text-sm border-b-4 border-[#333333] pb-4">Warning: Executing this command will permanently scrap your operator file and all assigned lines. Irreversible action.</p>
 
-        <form th:action="@{/users/profile/delete}" method="POST" onsubmit="return confirm('Are you absolutely sure you want to delete your account? This will wipe all your projects!');">
-            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded transition duration-200">
-                Delete My Account
+        <form th:action="@{/users/profile/delete}" method="POST" onsubmit="return confirm('DANGER: Are you absolutely sure you want to scrub your Operator ID from the system?');">
+            <button type="submit" class="bg-[#333333] hover:bg-[#1a1a1a] text-red-500 font-black uppercase tracking-widest py-4 px-6 border-2 border-[#333333] shadow-[4px_4px_0_0_#450a0a] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all w-full sm:w-auto">
+                Terminate Record
             </button>
         </form>
     </div>
 
-</div>
+</main>
+
+<div class="caution-tape mt-10"></div>
+<footer class="bg-[#333333] border-t-8 border-[#1a1a1a] py-8 flex-shrink-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="text-xs font-black uppercase tracking-[0.3em] text-stone-400">
+            &copy; 2026 Junction | BCCA Water Valley, MS
+        </div>
+        <div class="flex gap-6 text-[10px] font-black uppercase tracking-widest text-[#FFC300]">
+            <span>Yard Status: Online</span>
+        </div>
+    </div>
+</footer>
 
 </body>
 </html>

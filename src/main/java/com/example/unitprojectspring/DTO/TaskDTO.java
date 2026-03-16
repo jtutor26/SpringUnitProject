@@ -6,15 +6,19 @@ public class TaskDTO {
     private String title;
     private String description;
     private boolean isCompleted;
+    private String cargoClass;
+    private String deliveryDate;
 
     // Constructors
     public TaskDTO() {}
 
-    public TaskDTO(Long id, String title, String description, boolean isCompleted) {
+    public TaskDTO(Long id, String title, String description, boolean isCompleted, String cargoClass, String deliveryDate) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.isCompleted = isCompleted;
+        this.cargoClass = cargoClass;
+        this.deliveryDate = deliveryDate;
     }
 
     // --- Getters and Setters ---
@@ -32,4 +36,20 @@ public class TaskDTO {
 
     public boolean isCompleted() { return isCompleted; }
     public void setCompleted(boolean completed) { isCompleted = completed; }
+
+    public String getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(String deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public String getCargoClass() {
+        return cargoClass;
+    }
+
+    public void setCargoClass(String cargoClass) {
+        this.cargoClass = cargoClass;
+    }
 }

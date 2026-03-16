@@ -17,11 +17,12 @@ public class TaskController {
     }
 
     @PostMapping("/section/{sectionId}/add")
-    public String createTask(@ModelAttribute Task task, @PathVariable Long sectionId, HttpServletRequest request) {
+    public String addTask(@PathVariable Long sectionId, @ModelAttribute Task task, HttpServletRequest request) {
+
         taskService.createTask(task, sectionId);
 
         String referer = request.getHeader("Referer");
-        return "redirect:" + (referer != null ? referer : "/api/dashboard");
+        return "redirect:" + (referer != null ? referer : "/sections/" + sectionId);
     }
 
     @PostMapping("/{id}/update")

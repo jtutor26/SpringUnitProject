@@ -92,9 +92,11 @@ public class SectionService {
         TaskDTO taskDto = new TaskDTO();
         taskDto.setId(taskEntity.getId());
         taskDto.setTitle(taskEntity.getTitle());
-
         taskDto.setDescription(taskEntity.getDescription());
         taskDto.setCompleted(taskEntity.isCompleted());
+
+        taskDto.setCargoClass(taskEntity.getCargoClass());
+        taskDto.setDeliveryDate(taskEntity.getDeliveryDate());
 
         if (taskEntity.getSection() != null) {
             taskDto.setSectionId(taskEntity.getSection().getId());

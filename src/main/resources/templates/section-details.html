@@ -3,79 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${section.title} + ' - Tasks'">Section Details</title>
+    <title th:text="${section.title} + ' - Cargo'">Car Details</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar for consistency */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #d6d3d1;
+            border-top: 2px solid #333333;
+            border-bottom: 2px solid #333333;
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 10px, #a8a29e 10px, #a8a29e 12px);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FFC300;
+            border: 2px solid #333333;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF5733;
+        }
+        .rail-track {
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 15px, #333333 15px, #333333 20px);
+        }
+        /* Heavy Industrial Caution Tape */
+        .caution-tape {
+            background: repeating-linear-gradient(
+                    -45deg,
+                    #FFC300,
+                    #FFC300 20px,
+                    #333333 20px,
+                    #333333 40px
+            );
+            height: 20px;
+            width: 100%;
+            border-top: 4px solid #333333;
+            border-bottom: 4px solid #333333;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 font-sans leading-normal tracking-normal h-screen flex flex-col">
+<body class="bg-stone-300 font-sans leading-normal tracking-normal min-h-screen flex flex-col overflow-x-hidden">
 
-<div class="bg-white shadow-sm p-6 mb-6">
-    <div class="container mx-auto max-w-3xl flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800" th:text="${section.title}">Section Title</h1>
+<nav class="bg-[#333333] border-b-8 border-[#FF5733] relative overflow-hidden flex-shrink-0">
+    <div class="absolute inset-0 rail-track opacity-20 pointer-events-none border-y-4 border-[#333333] h-16 mt-0"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="flex justify-between h-20">
+            <div class="flex items-center">
+                <svg class="w-10 h-10 mr-3 text-[#FFC300]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 2v20" />
+                    <path d="M17 2v20" />
+                    <path d="M7 7h10" />
+                    <path d="M7 12h10" />
+                    <path d="M7 17h10" />
+                </svg>
+                <span class="text-3xl font-black text-white tracking-widest uppercase">Junc<span class="text-[#FFC300]">tion</span></span>
+            </div>
+            <div class="flex items-center">
+                <a th:href="@{/api/dashboard/project/{id}(id=${section.projectId})}" class="inline-flex items-center px-4 py-2 border-2 border-[#333333] text-xs font-black uppercase tracking-widest text-stone-100 bg-[#333333] hover:bg-stone-700 hover:border-[#FFC300] transition-colors">
+                    <svg class="w-4 h-4 mr-2 text-[#FFC300]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="square" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Line Overview
+                </a>
+            </div>
         </div>
+    </div>
+</nav>
 
-        <a th:href="@{/api/dashboard/project/{id}(id=${section.projectId})}" class="text-blue-600 hover:text-blue-800 font-semibold bg-blue-50 py-2 px-4 rounded transition duration-200">
-            &larr; Back to Project
-        </a>
+<div class="bg-[#FFC300] border-b-4 border-[#333333] py-6 flex-shrink-0 shadow-[0_4px_0_0_#1c1917]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-black text-[#333333] tracking-widest uppercase flex items-center gap-3">
+            <span class="bg-[#333333] text-[#FFC300] px-3 py-1 text-sm mr-2 border-2 border-[#333333]">CAR</span>
+            <span th:text="${section.title}">Section Title</span>
+        </h1>
+        <p class="text-[#333333] font-mono font-bold text-sm mt-2 ml-16">Cargo Manifest Management</p>
     </div>
 </div>
 
-<div class="container mx-auto max-w-3xl px-6 pb-8">
+<div class="caution-tape"></div>
 
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-xl font-bold text-gray-700 mb-4 border-b pb-2">Tasks</h2>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full flex-grow">
 
-        <div class="space-y-4 mb-6">
+    <div class="bg-[#FFC300] p-6 border-4 border-[#333333] shadow-[8px_8px_0_0_#1c1917] mb-12 relative">
+        <div class="absolute top-0 right-0 w-8 h-8 border-b-4 border-l-4 border-[#333333]"></div>
 
-            <div th:each="task : ${section.tasks}" class="flex items-start justify-between gap-4 p-3 hover:bg-gray-50 rounded border border-gray-100 transition-colors">
+        <h2 class="text-lg font-black mb-4 text-[#333333] uppercase tracking-wider flex items-center">
+            <svg class="w-6 h-6 mr-3 text-[#333333]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="square" d="M12 4v16m8-8H4"></path></svg>
+            Load New Cargo
+        </h2>
 
-                <form th:action="@{/tasks/{id}/toggle(id=${task.id})}" method="POST" class="mt-1">
-                    <button type="submit" class="focus:outline-none">
-                        <span th:if="${task.completed}" class="text-green-500 text-2xl hover:text-green-600">✅</span>
-                        <span th:unless="${task.completed}" class="text-gray-300 text-2xl hover:text-gray-400">⬜</span>
-                    </button>
-                </form>
+        <form th:action="@{/tasks/section/{sectionId}/add(sectionId=${section.id})}" method="POST" class="flex flex-wrap lg:flex-nowrap gap-4 items-end">
+            <div class="flex-grow">
+                <label class="block text-[10px] font-black uppercase tracking-widest text-[#333333] mb-1">Cargo ID</label>
+                <input type="text" name="title" placeholder="IDENTIFIER" required
+                       class="w-full border-2 border-[#333333] p-2 bg-white font-mono text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#FF5733] uppercase shadow-inner">
+            </div>
 
-                <div class="flex-grow">
-                    <p class="text-gray-800 font-bold text-lg"
-                       th:text="${task.title}"
-                       th:classappend="${task.completed} ? 'line-through text-gray-400' : ''">
-                        Task Title
-                    </p>
-                    <p class="text-gray-500 mt-1" th:text="${task.description}">Task Description</p>
-                </div>
+            <div class="flex-grow">
+                <label class="block text-[10px] font-black uppercase tracking-widest text-[#333333] mb-1">Class</label>
+                <select name="cargoClass" class="w-full border-2 border-[#333333] p-2 bg-white font-mono text-sm text-[#333333] uppercase focus:outline-none focus:ring-2 focus:ring-[#FF5733] shadow-inner appearance-none cursor-pointer">
+                    <option value="STANDARD">STANDARD</option>
+                    <option value="EXPRESS">EXPRESS</option>
+                    <option value="HAZMAT">HAZMAT</option>
+                </select>
+            </div>
 
-                <form th:action="@{/tasks/{id}/delete(id=${task.id})}" method="POST" onsubmit="return confirm('Delete this task?');">
-                    <button type="submit" class="text-red-500 hover:text-red-700 p-2 bg-red-50 rounded font-semibold text-sm">
-                        Delete
+            <div class="flex-grow">
+                <label class="block text-[10px] font-black uppercase tracking-widest text-[#333333] mb-1">Deadline</label>
+                <input type="date" name="deliveryDate"
+                       class="w-full border-2 border-[#333333] p-2 bg-white font-mono text-sm text-[#333333] uppercase focus:outline-none focus:ring-2 focus:ring-[#FF5733] shadow-inner">
+            </div>
+
+            <div class="flex-grow lg:w-1/3">
+                <label class="block text-[10px] font-black uppercase tracking-widest text-[#333333] mb-1">Specs (Optional)</label>
+                <input type="text" name="description" placeholder="DETAILS"
+                       class="w-full border-2 border-[#333333] p-2 bg-white font-mono text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#FF5733] shadow-inner">
+            </div>
+
+            <button type="submit"
+                    class="bg-[#333333] hover:bg-[#1a1a1a] text-[#FFC300] font-black uppercase tracking-widest text-xs py-3 px-8 border-2 border-[#333333] shadow-[4px_4px_0_0_#1c1917] transition-all active:translate-y-1 active:translate-x-1 active:shadow-none flex-shrink-0">
+                Load Item
+            </button>
+        </form>
+    </div>
+
+    <div class="mb-4">
+        <h2 class="text-2xl font-black text-[#333333] uppercase tracking-widest flex items-center gap-4">
+            <svg class="w-6 h-6 text-[#FF5733]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="square" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+            Cargo Items
+            <div class="flex-grow h-1 bg-[#333333]"></div>
+        </h2>
+    </div>
+
+    <div th:if="${section.tasks == null or section.tasks.empty}" class="bg-stone-200 border-4 border-dashed border-[#333333] p-16 text-center text-stone-600 mb-8 uppercase font-bold tracking-widest">
+        Car is empty. Load cargo above.
+    </div>
+
+    <div th:unless="${section.tasks == null or section.tasks.empty}" class="bg-stone-100 border-4 border-[#333333] shadow-[10px_10px_0_0_#1c1917] divide-y-2 divide-stone-300 mb-12">
+
+        <div class="hidden lg:flex items-center px-6 py-3 bg-[#333333] text-[10px] font-black uppercase tracking-[0.2em] text-[#FFC300]">
+            <div class="w-16 text-center">Status</div>
+            <div class="flex-grow px-4">Cargo Designation & Manifest</div>
+            <div class="w-48 px-4 text-center">Handling Class</div>
+            <div class="w-24 text-right text-[#FF5733]">Actions</div>
+        </div>
+
+        <div th:each="task : ${section.tasks}" class="flex flex-col lg:flex-row lg:items-center px-6 py-4 hover:bg-white transition-colors group relative border-l-8 border-transparent hover:border-[#FFC300]">
+
+            <div class="flex justify-center items-center lg:w-16 mb-4 lg:mb-0">
+                <form th:action="@{/tasks/{id}/toggle(id=${task.id})}" method="POST">
+                    <button type="submit" class="focus:outline-none w-8 h-8 border-2 border-[#333333] flex items-center justify-center bg-stone-200 hover:bg-[#FFC300] transition-colors shadow-[2px_2px_0_0_#1c1917] active:translate-y-px active:translate-x-px active:shadow-none">
+                        <svg th:if="${task.completed}" class="w-5 h-5 text-[#FF5733]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
                     </button>
                 </form>
             </div>
 
-            <div th:if="${section.tasks == null or section.tasks.empty}" class="text-center text-gray-400 py-4 italic">
-                No tasks found in this section. Add one below!
+            <div class="flex-grow lg:px-4 flex flex-col">
+                <p class="text-xl font-black text-[#333333] uppercase tracking-widest"
+                   th:text="${task.title}"
+                   th:classappend="${task.completed} ? 'line-through text-stone-400' : ''">
+                    Cargo Title
+                </p>
+                <p th:if="${task.description != null and !task.description.empty}" class="text-stone-600 font-mono text-sm mt-1 truncate max-w-2xl" th:text="${task.description}">Details...</p>
+            </div>
+
+            <div class="lg:w-48 lg:px-4 my-4 lg:my-0 flex flex-col items-center gap-2">
+                <span class="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 border-2 border-[#333333] shadow-[2px_2px_0_0_#1c1917]"
+                      th:text="${task.cargoClass}"
+                      th:classappend="${task.cargoClass == 'HAZMAT'} ? 'bg-[#FF5733] text-white' : (${task.cargoClass == 'EXPRESS'} ? 'bg-[#FFC300] text-[#333333]' : 'bg-stone-200 text-stone-600')">
+                    CLASS
+                </span>
+                <span th:if="${task.deliveryDate != null and !task.deliveryDate.empty}" class="text-[10px] font-mono font-bold text-[#333333] flex items-center">
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <span th:text="${task.deliveryDate}">Date</span>
+                </span>
+            </div>
+
+            <div class="lg:w-24 flex lg:justify-end">
+                <form th:action="@{/tasks/{id}/delete(id=${task.id})}" method="POST" onsubmit="return confirm('Jettison this cargo?');">
+                    <button type="submit" class="p-2 text-stone-400 hover:text-[#FF5733] border-2 border-[#333333] hover:border-[#FF5733] transition-all bg-white shadow-[2px_2px_0_0_#1c1917] active:translate-y-px active:translate-x-px active:shadow-none" title="Jettison">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="square" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </form>
             </div>
 
         </div>
-
-        <div class="bg-gray-50 p-5 rounded border border-gray-200 mt-4 shadow-inner">
-            <h3 class="font-semibold text-gray-700 mb-3">Add a New Task</h3>
-
-            <form th:action="@{/tasks/section/{sectionId}/add(sectionId=${section.id})}" method="POST" class="flex flex-col gap-3">
-                <input type="text" name="title" placeholder="Task Title" required
-                       class="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
-
-                <textarea name="description" placeholder="Short Description (Optional)" rows="2"
-                          class="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"></textarea>
-
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded transition duration-200 self-start">
-                    Add Task
-                </button>
-            </form>
-        </div>
-
     </div>
-</div>
+
+</main>
+
+<div class="caution-tape"></div>
+<div class="caution-tape mt-10"></div>
+<footer class="bg-[#333333] border-t-8 border-[#1a1a1a] py-8 flex-shrink-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="text-xs font-black uppercase tracking-[0.3em] text-stone-400">
+            &copy; 2026 Junction | BCCA Water Valley, MS
+        </div>
+        <div class="flex gap-6 text-[10px] font-black uppercase tracking-widest text-[#FFC300]">
+            <span>Yard Status: Online</span>
+        </div>
+    </div>
+</footer>
 
 </body>
 </html>

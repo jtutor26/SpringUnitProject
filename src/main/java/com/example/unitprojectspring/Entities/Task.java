@@ -23,12 +23,21 @@ public class Task {
     @JoinColumn(name = "section_id", nullable = false)
     private Section section;
 
+    private String cargoClass;
+    private String deliveryDate;
+
     public Task() {}
 
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
     }
+
+    public String getCargoClass() { return cargoClass; }
+    public void setCargoClass(String cargoClass) { this.cargoClass = cargoClass; }
+
+    public String getDeliveryDate() { return deliveryDate; }
+    public void setDeliveryDate(String deliveryDate) { this.deliveryDate = deliveryDate; }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
