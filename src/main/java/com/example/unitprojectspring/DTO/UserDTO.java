@@ -1,5 +1,7 @@
 package com.example.unitprojectspring.DTO;
 
+import com.example.unitprojectspring.Entities.User;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,4 +41,5 @@ public class UserDTO {
 
     public List<ProjectDTO> getProjects() { return projects; }
     public void setProjects(List<ProjectDTO> projects) { this.projects = projects; }
+
 }

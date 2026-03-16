@@ -5,23 +5,26 @@ import com.example.unitprojectspring.Entities.Project;
 import com.example.unitprojectspring.Entities.Section;
 import com.example.unitprojectspring.Entities.User;
 import com.example.unitprojectspring.Repositories.ProjectRepository;
+import com.example.unitprojectspring.Repositories.SectionRepository;
 import com.example.unitprojectspring.Repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final SectionRepository sectionRepository;
 
     private final UserRepository userRepository;
 
 
-    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository) {
+    public ProjectService(ProjectRepository projectRepository, SectionRepository sectionRepository, UserRepository userRepository) {
         this.projectRepository = projectRepository;
+        this.sectionRepository = sectionRepository;
         this.userRepository = userRepository;
     }
 
@@ -38,18 +41,20 @@ public class ProjectService {
 
         Project savedProject = projectRepository.save(project);
 
-        return convertToDto(savedProject);
+        return convertProjectToDto(savedProject);
     }
 
+    @Transactional
     public ProjectDTO getProjectById(Long id) {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
-        return convertToDto(project);
+
+        return convertProjectToDto(project);
     }
 
     public List<ProjectDTO> getAllProjectsWithUserId(Long userId) {
         return projectRepository.findByUserId(userId).stream()
-                .map(this::convertToDto)
+                .map(this::convertProjectToDto)
                 .collect(Collectors.toList());
     }
 
@@ -59,7 +64,7 @@ public class ProjectService {
         project.setTitle(projectDetails.getTitle());
         project.setDescription(projectDetails.getDescription());
         Project updatedProject = projectRepository.save(project);
-        return convertToDto(updatedProject);
+        return convertProjectToDto(updatedProject);
     }
 
     public void deleteProject(Long id) {
@@ -69,7 +74,24 @@ public class ProjectService {
         projectRepository.deleteById(id);
     }
 
-    private ProjectDTO convertToDto(Project projectEntity) {
+    @Transactional
+    public void createProjectWithSection(Project project, String sectionTitle, Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        project.setUser(user);
+
+        Project savedProject = projectRepository.save(project);
+
+        Section initialSection = new Section();
+        initialSection.setTitle(sectionTitle);
+
+        initialSection.setProject(savedProject);
+
+        sectionRepository.save(initialSection);
+    }
+
+    private ProjectDTO convertProjectToDto(Project projectEntity) {
         ProjectDTO dto = new ProjectDTO();
         dto.setId(projectEntity.getId());
         dto.setTitle(projectEntity.getTitle());
@@ -79,6 +101,39 @@ public class ProjectService {
         if (projectEntity.getUser() != null) {
             dto.setUserId(projectEntity.getUser().getId());
         }
+
+        if (projectEntity.getSections() != null) {
+            List<SectionDTO> sectionDTOs = projectEntity.getSections().stream()
+                    .map(this::convertSectionToDto)
+                    .collect(Collectors.toList());
+            dto.setSections(sectionDTOs);
+        }
+
         return dto;
+    }
+
+    private SectionDTO convertSectionToDto(Section sectionEntity) {
+        SectionDTO sectionDto = new SectionDTO();
+        sectionDto.setId(sectionEntity.getId());
+        sectionDto.setTitle(sectionEntity.getTitle());
+
+        if (sectionEntity.getProject() != null) {
+            sectionDto.setProjectId(sectionEntity.getProject().getId());
+        }
+
+        if (sectionEntity.getTasks() != null) {
+            List<com.example.unitprojectspring.DTO.TaskDTO> taskDTOs = sectionEntity.getTasks().stream()
+                    .map(task -> {
+                        com.example.unitprojectspring.DTO.TaskDTO t = new com.example.unitprojectspring.DTO.TaskDTO();
+                        t.setId(task.getId());
+                        t.setTitle(task.getTitle());
+                        t.setDescription(task.getDescription());
+                        t.setCompleted(task.isCompleted());
+                        return t;
+                    }).collect(Collectors.toList());
+            sectionDto.setTasks(taskDTOs);
+        }
+
+        return sectionDto;
     }
 }

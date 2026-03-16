@@ -24,7 +24,7 @@ public class Project {
     private User user;
 
     // A Project has many Sections.
-    @OneToMany(mappedBy = "projects", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Section> sections = new ArrayList<>();
 
     public Project() {}

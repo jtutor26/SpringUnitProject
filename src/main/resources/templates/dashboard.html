@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">My Projects</h1>
+
+        <div class="flex items-center gap-4">
+            <div th:if="${param.error}" class="text-red-500 font-semibold">
+                Unauthorized action.
+            </div>
+            <a th:href="@{/users/profile}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded transition duration-200">
+                My Profile
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Add New Project</h2>
+
+        <form th:action="@{/api/dashboard/add}" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+            <input type="text" name="title" placeholder="Project Title" required
+                   class="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+            <input type="text" name="description" placeholder="Short Description"
+                   class="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+            <input type="text" name="sectionTitle" placeholder="First Section (e.g. 'To Do')" required
+                   class="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+            <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded transition duration-200">
+                Add Project
+            </button>
+        </form>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <table class="min-w-full bg-white">
+            <thead class="bg-gray-800 text-white">
+            <tr>
+                <th class="py-3 px-6 text-left uppercase font-semibold text-sm">ID</th>
+                <th class="py-3 px-6 text-left uppercase font-semibold text-sm">Project Title</th>
+                <th class="py-3 px-6 text-left uppercase font-semibold text-sm">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="text-gray-700">
+            <tr th:if="${projects.empty}">
+                <td colspan="3" class="py-4 text-center text-gray-500 italic">No projects found. Start by adding one!</td>
+            </tr>
+            <tr th:each="project : ${projects}" class="border-b hover:bg-gray-50">
+
+                <td class="py-3 px-6">
+                    <a th:href="@{/api/dashboard/project/{id}(id=${project.id})}"
+                       class="font-medium text-blue-600 hover:text-blue-800 hover:underline text-lg block"
+                       th:text="${project.title}">
+                        Project Alpha
+                    </a>
+
+                    <div class="flex items-center mt-2 max-w-xs">
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2">
+                            <div class="bg-green-500 h-2.5 rounded-full"
+                                 th:style="'width: ' + ${project.completionPercentage} + '%'">
+                            </div>
+                        </div>
+                        <span class="text-xs font-semibold text-gray-500"
+                              th:text="${project.completionPercentage} + '%'">0%
+                </span>
+                    </div>
+                </td>
+
+                <td class="py-3 px-6">
+                    <form th:action="@{/api/dashboard/{project_id}/delete(project_id=${project.id})}" method="POST" onsubmit="return confirm('Delete this project?');">
+                        <button type="submit" class="text-red-600 hover:text-red-900 font-semibold">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
