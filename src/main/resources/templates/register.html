@@ -1,132 +1,75 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Project Manager</title>
+    <title>Register - Junction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Clean, modern styling for your authentication pages */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f7f6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .auth-container {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            width: 100%;
-            max-width: 400px;
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-top: 0;
-            margin-bottom: 1.5rem;
-        }
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #555;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        input[type="text"], input[type="email"], input[type="password"] {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-        input:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
-        }
-        button {
-            width: 100%;
-            padding: 0.85rem;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            margin-top: 1rem;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .error-message {
-            background-color: #fee2e2;
-            color: #dc2626;
-            padding: 0.75rem;
-            border-radius: 6px;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            font-size: 0.9rem;
-            border: 1px solid #f87171;
-        }
-        .footer-text {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #666;
-            font-size: 0.9rem;
-        }
-        .footer-text a {
-            color: #007bff;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .footer-text a:hover {
-            text-decoration: underline;
+        .rail-track {
+            background-image: repeating-linear-gradient(0deg, transparent, transparent 15px, #292524 15px, #292524 20px);
         }
     </style>
 </head>
-<body>
+<body class="bg-stone-300 min-h-screen flex items-center justify-center font-sans relative overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
 
-<div class="auth-container">
-    <h2>Create an Account</h2>
-
-    <div th:if="${errorMessage}" class="error-message">
-        <span th:text="${errorMessage}"></span>
+    <!-- Railroad background decoration -->
+    <div class="absolute inset-0 z-0 flex justify-center opacity-20 pointer-events-none">
+        <div class="w-20 h-full border-x-8 border-stone-900 rail-track"></div>
+        <div class="w-64 h-full"></div>
+        <div class="w-20 h-full border-x-8 border-stone-900 rail-track"></div>
     </div>
 
-    <form th:action="@{/register}" th:object="${user}" method="POST">
+<div class="bg-stone-100 p-8 md:p-10 border-4 border-stone-900 shadow-[8px_8px_0px_0px_rgba(28,25,23,1)] w-full max-w-md relative z-10">
+    <div class="text-center mb-8 border-b-4 border-dashed border-stone-400 pb-6">
+        <div class="flex justify-center mb-4">
+            <svg class="w-16 h-16 text-orange-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 2v20" />
+                <path d="M17 2v20" />
+                <path d="M7 7h10" />
+                <path d="M7 12h10" />
+                <path d="M7 17h10" />
+            </svg>
+        </div>
+        <h2 class="text-4xl font-black text-stone-900 uppercase tracking-widest">Junc<span class="text-orange-600">tion</span></h2>
+        <p class="text-stone-600 mt-2 font-bold uppercase text-xs tracking-wider">Issue New Ticket</p>
+    </div>
 
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" th:field="*{username}" placeholder="Choose a username" required>
+    <div th:if="${errorMessage}" class="bg-red-500 border-2 border-stone-900 text-white p-4 mb-6 font-bold shadow-[4px_4px_0_0_#1c1917]" role="alert">
+        <p class="uppercase tracking-wide text-xs">Error Issuing Ticket</p>
+        <p class="text-sm" th:text="${errorMessage}">Error message</p>
+    </div>
+
+    <form th:action="@{/register}" th:object="${user}" method="POST" class="space-y-5">
+        <div>
+            <label for="username" class="block text-xs font-black uppercase tracking-widest text-stone-800 mb-2">Operator ID</label>
+            <input type="text" id="username" th:field="*{username}" placeholder="Choose an ID" required
+                   class="w-full px-4 py-3 border-2 border-stone-900 focus:outline-none focus:ring-4 focus:ring-orange-500 bg-white font-mono text-stone-900 shadow-inner">
         </div>
 
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" th:field="*{email}" placeholder="you@example.com" required>
+        <div>
+            <label for="email" class="block text-xs font-black uppercase tracking-widest text-stone-800 mb-2">Email Dispatch</label>
+            <input type="email" id="email" th:field="*{email}" placeholder="you@station.com" required
+                   class="w-full px-4 py-3 border-2 border-stone-900 focus:outline-none focus:ring-4 focus:ring-orange-500 bg-white font-mono text-stone-900 shadow-inner">
         </div>
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" th:field="*{password}" placeholder="Create a strong password" required>
+        <div>
+            <label for="password" class="block text-xs font-black uppercase tracking-widest text-stone-800 mb-2">Passcode</label>
+            <input type="password" id="password" th:field="*{password}" placeholder="Create passcode" required
+                   class="w-full px-4 py-3 border-2 border-stone-900 focus:outline-none focus:ring-4 focus:ring-orange-500 bg-white font-mono text-stone-900 shadow-inner">
         </div>
 
-        <button type="submit">Sign Up</button>
-
+        <button type="submit"
+                class="w-full flex justify-center py-4 border-2 border-stone-900 shadow-[4px_4px_0_0_#1c1917] text-sm font-black uppercase tracking-widest text-stone-900 bg-orange-500 hover:bg-orange-400 active:translate-y-1 active:translate-x-1 active:shadow-none transition-all mt-6">
+            Generate Ticket
+        </button>
     </form>
 
-    <div class="footer-text">
-        Already have an account? <a th:href="@{/login}">Log in here</a>
+    <div class="mt-8 text-center pt-6 border-t-4 border-dashed border-stone-400">
+        <p class="text-xs font-bold text-stone-600 uppercase tracking-wide">
+            Already have a ticket? 
+            <a th:href="@{/login}" class="font-black text-orange-600 hover:text-orange-700 underline decoration-2 underline-offset-4">Board here</a>
+        </p>
     </div>
 </div>
 

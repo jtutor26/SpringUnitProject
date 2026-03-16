@@ -30,6 +30,8 @@ public class TaskController {
         Task task = new Task();
         task.setTitle(taskDTO.getTitle());
         task.setDescription(taskDTO.getDescription());
+        task.setCargoClass(taskDTO.getCargoClass());
+        task.setDeliveryDate(taskDTO.getDeliveryDate());
         task.setCompleted(taskDTO.isCompleted());
 
         taskService.updateTask(id, task);

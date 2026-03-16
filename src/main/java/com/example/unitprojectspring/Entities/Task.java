@@ -19,6 +19,12 @@ public class Task {
     @Column(name = "is_completed")
     private boolean isCompleted = false;
 
+    @Column(name = "cargo_class")
+    private String cargoClass = "STANDARD";
+
+    @Column(name = "delivery_date")
+    private String deliveryDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "section_id", nullable = false)
     private Section section;
@@ -38,6 +44,12 @@ public class Task {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public String getCargoClass() { return cargoClass; }
+    public void setCargoClass(String cargoClass) { this.cargoClass = cargoClass; }
+
+    public String getDeliveryDate() { return deliveryDate; }
+    public void setDeliveryDate(String deliveryDate) { this.deliveryDate = deliveryDate; }
 
     public boolean isCompleted() { return isCompleted; }
     public void setCompleted(boolean completed) { isCompleted = completed; }

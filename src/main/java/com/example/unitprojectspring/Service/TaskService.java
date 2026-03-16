@@ -56,6 +56,8 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found"));
         task.setTitle(taskDetails.getTitle());
         task.setDescription(taskDetails.getDescription());
+        task.setCargoClass(taskDetails.getCargoClass());
+        task.setDeliveryDate(taskDetails.getDeliveryDate());
         task.setCompleted(taskDetails.isCompleted());
         Task updatedTask = taskRepository.save(task);
         return convertTaskToDto(updatedTask);
@@ -81,6 +83,8 @@ public class TaskService {
         dto.setId(taskEntity.getId());
         dto.setTitle(taskEntity.getTitle());
         dto.setDescription(taskEntity.getDescription());
+        dto.setCargoClass(taskEntity.getCargoClass());
+        dto.setDeliveryDate(taskEntity.getDeliveryDate());
         dto.setCompleted(taskEntity.isCompleted());
 
         if (taskEntity.getSection() != null) {

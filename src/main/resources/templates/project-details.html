@@ -3,75 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${project.title} + ' - Details'">Project Details</title>
+    <title th:text="${project.title} + ' - Details'">Line Details</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar for Kanban board - Railroad style */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #d6d3d1; 
+            border-top: 2px solid #292524;
+            border-bottom: 2px solid #292524;
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 10px, #a8a29e 10px, #a8a29e 12px);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f97316; 
+            border: 2px solid #292524;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ea580c; 
+        }
+        .rail-track {
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 15px, #292524 15px, #292524 20px);
+        }
+    </style>
 </head>
-<body class="bg-gray-100 font-sans leading-normal tracking-normal h-screen flex flex-col">
+<body class="bg-stone-300 font-sans leading-normal tracking-normal h-screen flex flex-col">
 
-<div class="bg-white shadow-sm p-6 mb-6">
-    <div class="container mx-auto flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800" th:text="${project.title}">Project Title</h1>
-            <p class="text-gray-500 mt-1" th:text="${project.description}">Project description goes here.</p>
+<!-- Industrial Navbar -->
+<nav class="bg-stone-900 border-b-8 border-orange-600 relative overflow-hidden flex-shrink-0">
+    <div class="absolute inset-0 rail-track opacity-20 pointer-events-none border-y-4 border-stone-900 h-16 mt-0"></div>
+    <div class="mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="flex justify-between h-20">
+            <div class="flex items-center">
+                <svg class="w-10 h-10 mr-3 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 2v20" />
+                    <path d="M17 2v20" />
+                    <path d="M7 7h10" />
+                    <path d="M7 12h10" />
+                    <path d="M7 17h10" />
+                </svg>
+                <span class="text-2xl font-black text-white tracking-widest uppercase">Junc<span class="text-orange-500">tion</span></span>
+            </div>
+            <div class="flex items-center">
+                <a th:href="@{/api/dashboard}" class="inline-flex items-center px-4 py-2 border-2 border-stone-700 text-xs font-black uppercase tracking-widest text-stone-100 bg-stone-800 hover:bg-stone-700 hover:border-orange-500 transition-colors">
+                    <svg class="w-4 h-4 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="square" stroke-linejoin="miter" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Yard Return
+                </a>
+            </div>
         </div>
-        <a th:href="@{/api/dashboard}" class="text-blue-600 hover:text-blue-800 font-semibold bg-blue-50 py-2 px-4 rounded transition duration-200">
-            &larr; Back to Dashboard
-        </a>
+    </div>
+</nav>
+
+<div class="bg-stone-200 border-b-4 border-stone-900 py-6 px-6 sm:px-8 flex-shrink-0 shadow-[0_4px_0_0_#1c1917] z-10">
+    <div class="flex justify-between items-start">
+        <div>
+            <h1 class="text-4xl font-black text-stone-900 tracking-widest uppercase flex items-center gap-3">
+                <svg class="w-8 h-8 text-orange-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span th:text="${project.title}">Line Title</span>
+            </h1>
+            <p class="text-stone-700 mt-2 font-mono text-sm border-l-4 border-orange-500 pl-3 max-w-3xl" th:text="${project.description}">Manifest goes here.</p>
+        </div>
     </div>
 </div>
 
-<div class="container mx-auto px-6 flex-grow flex items-start space-x-6 overflow-x-auto pb-8">
+<!-- Freight Cars Area (Kanban) -->
+<div class="flex-grow flex items-start space-x-6 overflow-x-auto p-6 sm:p-8 bg-stone-300">
 
-    <div th:each="section : ${project.sections}" class="bg-gray-200 rounded-lg p-4 min-w-[320px] w-80 shadow-sm flex-shrink-0">
+    <div th:each="section : ${project.sections}" class="bg-stone-100 border-4 border-stone-900 shadow-[6px_6px_0_0_#1c1917] p-4 min-w-[320px] w-80 flex-shrink-0 max-h-full flex flex-col relative group">
+        
+        <!-- Track connection visual -->
+        <div class="absolute -left-6 top-1/2 w-6 border-y-4 border-stone-900 rail-track h-4 opacity-50 z-[-1]"></div>
 
-        <div class="flex justify-between items-center mb-4">
-            <a th:href="@{/sections/{id}(id=${section.id})}" class="text-lg font-bold text-gray-700 hover:text-blue-600 hover:underline" th:text="${section.title}">
-                Section Name
-            </a>
+        <div class="flex justify-between items-center mb-4 px-1 pb-2 border-b-4 border-stone-900 bg-orange-500 p-2 -mx-4 -mt-4 border-b-stone-900 text-stone-900">
+            <h2 class="text-sm font-black uppercase tracking-widest flex items-center gap-2 w-full">
+                <a th:href="@{/sections/{id}(id=${section.id})}" class="hover:text-white transition-colors truncate" th:text="${section.title}">Car Name</a>
+                <span class="ml-auto bg-stone-900 text-orange-500 py-1 px-3 text-xs font-mono border-2 border-stone-900" th:text="${section.tasks != null ? section.tasks.size() : '0'}">0</span>
+            </h2>
         </div>
 
-        <div class="space-y-3 mb-4">
+        <div class="space-y-4 overflow-y-auto flex-grow pr-2 pb-2 custom-scroll mt-2">
 
-            <div th:each="task : ${section.tasks}" class="bg-white p-3 rounded shadow-sm group">
+            <div th:each="task : ${section.tasks}" class="bg-white p-4 border-2 border-stone-900 shadow-[4px_4px_0_0_#1c1917] hover:translate-y-px hover:translate-x-px hover:shadow-[2px_2px_0_0_#1c1917] transition-all relative">
+                
+                <!-- Ticket notch design -->
+                <div class="absolute -left-1.5 top-1/2 w-3 h-4 bg-stone-100 border-r-2 border-stone-900 rounded-r-full"></div>
 
-                <div class="flex items-start justify-between gap-3">
+                <div class="flex items-start justify-between gap-3 pl-2">
 
-                    <form th:action="@{/tasks/{id}/toggle(id=${task.id})}" method="POST" class="mt-1">
-                        <button type="submit" class="focus:outline-none">
-                            <span th:if="${task.completed}" class="text-green-500 text-lg hover:text-green-600">✅</span>
-                            <span th:unless="${task.completed}" class="text-gray-300 text-lg hover:text-gray-400">⬜</span>
+                    <form th:action="@{/tasks/{id}/toggle(id=${task.id})}" method="POST" class="mt-0.5">
+                        <button type="submit" class="focus:outline-none w-6 h-6 border-2 border-stone-900 flex items-center justify-center bg-stone-200 hover:bg-stone-300">
+                            <svg th:if="${task.completed}" class="w-4 h-4 text-orange-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
                         </button>
                     </form>
 
-                    <div class="flex-grow">
-                        <p class="text-gray-800 font-medium"
+                    <div class="flex-grow min-w-0">
+                        <div class="flex flex-wrap gap-1 mb-1.5">
+                            <span class="text-[9px] font-black uppercase tracking-widest px-1.5 border border-stone-900"
+                                  th:text="${task.cargoClass}"
+                                  th:classappend="${task.cargoClass == 'HAZMAT'} ? 'bg-red-500 text-white' : (${task.cargoClass == 'EXPRESS'} ? 'bg-yellow-400 text-stone-900' : 'bg-stone-200 text-stone-600')">
+                                CLASS
+                            </span>
+                            <span th:if="${task.deliveryDate != null and !task.deliveryDate.empty}" class="text-[9px] font-mono text-stone-500 flex items-center">
+                                <svg class="w-2.5 h-2.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span th:text="${task.deliveryDate}">Date</span>
+                            </span>
+                        </div>
+                        <p class="text-stone-900 font-bold text-sm uppercase tracking-wide truncate"
                            th:text="${task.title}"
-                           th:classappend="${task.completed} ? 'line-through text-gray-400' : ''">
-                            Task Title
+                           th:classappend="${task.completed} ? 'line-through text-stone-400' : ''">
+                            Cargo Item
                         </p>
-                        <p class="text-gray-500 text-sm mt-1" th:text="${task.description}">Description...</p>
+                        <p th:if="${task.description != null and !task.description.empty}" class="text-stone-600 font-mono text-xs mt-2 line-clamp-2 bg-stone-100 p-2 border border-stone-300" th:text="${task.description}">Details...</p>
                     </div>
 
-                    <form th:action="@{/tasks/{id}/delete(id=${task.id})}" method="POST" onsubmit="return confirm('Delete this task?');">
-                        <button type="submit" class="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity p-1">
-                            🗑️
+                    <form th:action="@{/tasks/{id}/delete(id=${task.id})}" method="POST" onsubmit="return confirm('Jettison cargo?');">
+                        <button type="submit" class="text-stone-400 hover:text-red-600 transition-colors p-1" title="Jettison">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="square" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
                     </form>
                 </div>
             </div>
 
-            <div th:if="${section.tasks == null or section.tasks.empty}" class="text-center text-gray-400 text-sm py-2 italic">
-                No tasks yet.
+            <div th:if="${section.tasks == null or section.tasks.empty}" class="bg-stone-200 border-2 border-dashed border-stone-400 p-6 text-center text-stone-500 text-xs font-black uppercase tracking-widest">
+                Car Empty
             </div>
 
+        </div>
+        
+        <div class="pt-4 mt-2 border-t-4 border-stone-900">
+            <a th:href="@{/sections/{id}(id=${section.id})}" class="flex items-center justify-center text-xs font-black uppercase tracking-widest text-stone-900 border-2 border-stone-900 bg-orange-500 hover:bg-orange-400 py-3 shadow-[4px_4px_0_0_#1c1917] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all w-full">
+                Inspect Cargo &rarr;
+            </a>
         </div>
 
     </div>
 
-    <div class="min-w-[320px] w-80 flex-shrink-0">
-        <form th:action="@{/sections/project/{projectId}/add(projectId=${project.id})}" method="POST" class="bg-gray-200 rounded-lg p-4 hover:bg-gray-300 transition-colors">
-            <input type="text" name="title" placeholder="+ Add another section" required
-                   class="w-full bg-transparent border-none rounded p-2 text-sm font-semibold text-gray-600 placeholder-gray-500 focus:bg-white focus:ring-2 focus:ring-blue-400 transition-colors">
+    <!-- Hitch New Car -->
+    <div class="min-w-[320px] w-80 flex-shrink-0 relative">
+        <div class="absolute -left-6 top-1/2 w-6 border-y-4 border-stone-900 rail-track h-4 opacity-50 z-[-1]"></div>
+        
+        <form th:action="@{/sections/project/{projectId}/add(projectId=${project.id})}" method="POST" class="bg-stone-200 border-4 border-dashed border-stone-500 hover:border-orange-500 hover:bg-stone-100 transition-all duration-200 p-6 flex flex-col items-center justify-center h-full min-h-[200px]">
+            <svg class="w-8 h-8 mb-4 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="square" d="M12 4v16m8-8H4"></path></svg>
+            <input type="text" name="title" placeholder="HITCH NEW CAR" required
+                   class="w-full bg-white border-2 border-stone-900 p-3 text-center text-xs font-black uppercase tracking-widest placeholder-stone-400 focus:outline-none focus:ring-4 focus:ring-orange-500 shadow-inner">
+            <button type="submit" class="hidden">Add</button>
         </form>
     </div>
 

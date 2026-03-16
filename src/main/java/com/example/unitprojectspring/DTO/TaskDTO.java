@@ -5,15 +5,19 @@ public class TaskDTO {
     private Long sectionId;
     private String title;
     private String description;
+    private String cargoClass;
+    private String deliveryDate;
     private boolean isCompleted;
 
     // Constructors
     public TaskDTO() {}
 
-    public TaskDTO(Long id, String title, String description, boolean isCompleted) {
+    public TaskDTO(Long id, String title, String description, String cargoClass, String deliveryDate, boolean isCompleted) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.cargoClass = cargoClass;
+        this.deliveryDate = deliveryDate;
         this.isCompleted = isCompleted;
     }
 
@@ -29,6 +33,12 @@ public class TaskDTO {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public String getCargoClass() { return cargoClass; }
+    public void setCargoClass(String cargoClass) { this.cargoClass = cargoClass; }
+
+    public String getDeliveryDate() { return deliveryDate; }
+    public void setDeliveryDate(String deliveryDate) { this.deliveryDate = deliveryDate; }
 
     public boolean isCompleted() { return isCompleted; }
     public void setCompleted(boolean completed) { isCompleted = completed; }
