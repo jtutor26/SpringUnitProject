@@ -89,11 +89,17 @@
 
         <div class="absolute -left-6 top-1/2 w-6 border-y-4 border-[#333333] rail-track h-4 opacity-50 z-[-1]"></div>
 
-        <div class="flex justify-between items-center mb-4 px-1 pb-2 border-b-4 border-[#333333] bg-[#333333] p-2 -mx-4 -mt-4 text-[#FFC300]">
+        <div class="flex justify-between items-center mb-4 px-1 pb-2 border-b-4 border-[#333333] bg-[#333333] p-2 -mx-4 -mt-4 text-[#FFC300] relative">
             <h2 class="text-sm font-black uppercase tracking-widest flex items-center gap-2 w-full">
                 <a th:href="@{/sections/{id}(id=${section.id})}" class="hover:text-white transition-colors truncate pl-2" th:text="${section.title}">Car Name</a>
                 <span class="ml-auto bg-[#FFC300] text-[#333333] py-1 px-3 text-xs font-mono border-2 border-[#333333]" th:text="${section.tasks != null ? section.tasks.size() : '0'}">0</span>
             </h2>
+
+            <form th:action="@{/sections/{id}/delete(id=${section.id})}" method="POST" onsubmit="return confirm('DANGER: Scrap this car and jettison all cargo inside?');" class="absolute top-[-16px] right-[-16px] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <button type="submit" class="bg-[#333333] text-red-500 hover:text-white hover:bg-red-600 border-2 border-[#333333] p-1.5 shadow-[2px_2px_0_0_#1c1917] active:translate-y-px active:translate-x-px active:shadow-none transition-all" title="Scrap Car">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="square" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </form>
         </div>
 
         <div class="space-y-4 overflow-y-auto flex-grow pr-2 pb-2 custom-scroll mt-2">
@@ -169,10 +175,11 @@
 <footer class="bg-[#333333] border-t-8 border-[#1a1a1a] py-8 flex-shrink-0">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="text-xs font-black uppercase tracking-[0.3em] text-stone-400">
-            &copy; 2026 Junction | BCCA Water Valley, MS
+            &copy; 2026 Junction Transit Authority | Water Valley, MS
         </div>
         <div class="flex gap-6 text-[10px] font-black uppercase tracking-widest text-[#FFC300]">
             <span>Yard Status: Online</span>
+            <span>System: v4.0.3</span>
         </div>
     </div>
 </footer>

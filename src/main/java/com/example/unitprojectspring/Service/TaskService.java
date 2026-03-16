@@ -54,9 +54,13 @@ public class TaskService {
     public TaskDTO updateTask(Long id, Task taskDetails) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
+
         task.setTitle(taskDetails.getTitle());
         task.setDescription(taskDetails.getDescription());
         task.setCompleted(taskDetails.isCompleted());
+        task.setCargoClass(taskDetails.getCargoClass());
+        task.setDeliveryDate(taskDetails.getDeliveryDate());
+
         Task updatedTask = taskRepository.save(task);
         return convertTaskToDto(updatedTask);
     }
