@@ -25,7 +25,9 @@
     <div th:each="section : ${project.sections}" class="bg-gray-200 rounded-lg p-4 min-w-[320px] w-80 shadow-sm flex-shrink-0">
 
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-bold text-gray-700" th:text="${section.name}">Section Name</h2>
+            <a th:href="@{/sections/{id}(id=${section.id})}" class="text-lg font-bold text-gray-700 hover:text-blue-600 hover:underline" th:text="${section.title}">
+                Section Name
+            </a>
         </div>
 
         <div class="space-y-3 mb-4">
@@ -58,23 +60,17 @@
                 </div>
             </div>
 
-            <div th:if="${section.tasks.empty}" class="text-center text-gray-400 text-sm py-2 italic">
+            <div th:if="${section.tasks == null or section.tasks.empty}" class="text-center text-gray-400 text-sm py-2 italic">
                 No tasks yet.
             </div>
 
         </div>
 
-        <form th:action="@{/tasks/section/{sectionId}/add(sectionId=${section.id})}" method="POST" class="mt-4">
-            <input type="text" name="title" placeholder="+ Add a task" required
-                   class="w-full bg-gray-100 border-none rounded p-2 text-sm focus:bg-white focus:ring-2 focus:ring-blue-400 transition-colors">
-            <input type="hidden" name="description" value="">
-        </form>
-
     </div>
 
     <div class="min-w-[320px] w-80 flex-shrink-0">
         <form th:action="@{/sections/project/{projectId}/add(projectId=${project.id})}" method="POST" class="bg-gray-200 rounded-lg p-4 hover:bg-gray-300 transition-colors">
-            <input type="text" name="name" placeholder="+ Add another section" required
+            <input type="text" name="title" placeholder="+ Add another section" required
                    class="w-full bg-transparent border-none rounded p-2 text-sm font-semibold text-gray-600 placeholder-gray-500 focus:bg-white focus:ring-2 focus:ring-blue-400 transition-colors">
         </form>
     </div>

@@ -1,13 +1,13 @@
 package com.example.unitprojectspring.Service;
 import com.example.unitprojectspring.DTO.SectionDTO;
+import com.example.unitprojectspring.DTO.TaskDTO;
 import com.example.unitprojectspring.Entities.Project;
 import com.example.unitprojectspring.Entities.Section;
+import com.example.unitprojectspring.Entities.Task;
 import com.example.unitprojectspring.Repositories.ProjectRepository;
 import com.example.unitprojectspring.Repositories.SectionRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,20 +36,20 @@ public class SectionService {
 
         Section savedSection = sectionRepository.save(section);
 
-        return convertToDto(savedSection);
+        return convertSectionToDto(savedSection);
     }
 
     public SectionDTO getSectionById(Long id) {
         Section section = sectionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Section not found"));
-        return convertToDto(section);
+        return convertSectionToDto(section);
     }
 
     public List<SectionDTO> getAllSectionsByProject(Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
         return project.getSections().stream()
-                .map(this::convertToDto)
+                .map(this::convertSectionToDto)
                 .collect(Collectors.toList());
     }
 
@@ -58,7 +58,7 @@ public class SectionService {
                 .orElseThrow(() -> new RuntimeException("Section not found"));
         section.setTitle(sectionDetails.getTitle());
         Section updatedSection = sectionRepository.save(section);
-        return convertToDto(updatedSection);
+        return convertSectionToDto(updatedSection);
     }
 
     public void deleteSection(Long id) {
@@ -68,7 +68,7 @@ public class SectionService {
         sectionRepository.deleteById(id);
     }
 
-    private SectionDTO convertToDto(Section sectionEntity) {
+    private SectionDTO convertSectionToDto(Section sectionEntity) {
         SectionDTO dto = new SectionDTO();
         dto.setId(sectionEntity.getId());
         dto.setTitle(sectionEntity.getTitle());
@@ -77,6 +77,29 @@ public class SectionService {
         if (sectionEntity.getProject() != null) {
             dto.setProjectId(sectionEntity.getProject().getId());
         }
+
+        if (sectionEntity.getTasks() != null) {
+            List<TaskDTO> taskDTOs = sectionEntity.getTasks().stream()
+                    .map(this::convertTaskToDto)
+                    .collect(Collectors.toList());
+            dto.setTasks(taskDTOs);
+        }
+
         return dto;
+    }
+
+    private TaskDTO convertTaskToDto(Task taskEntity) {
+        TaskDTO taskDto = new TaskDTO();
+        taskDto.setId(taskEntity.getId());
+        taskDto.setTitle(taskEntity.getTitle());
+
+        taskDto.setDescription(taskEntity.getDescription());
+        taskDto.setCompleted(taskEntity.isCompleted());
+
+        if (taskEntity.getSection() != null) {
+            taskDto.setSectionId(taskEntity.getSection().getId());
+        }
+
+        return taskDto;
     }
 }

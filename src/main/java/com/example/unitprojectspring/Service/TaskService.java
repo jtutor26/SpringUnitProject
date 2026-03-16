@@ -1,16 +1,12 @@
 package com.example.unitprojectspring.Service;
-import com.example.unitprojectspring.DTO.ProjectDTO;
 import com.example.unitprojectspring.DTO.TaskDTO;
-import com.example.unitprojectspring.Entities.Project;
 import com.example.unitprojectspring.Entities.Section;
 import com.example.unitprojectspring.Entities.Task;
-import com.example.unitprojectspring.Entities.User;
 import com.example.unitprojectspring.Repositories.SectionRepository;
 import com.example.unitprojectspring.Repositories.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +21,7 @@ public class TaskService {
         this.sectionRepository = sectionRepository;
     }
 
-    public TaskDTO createTask(Task task, Long section_id) {
+    public void createTask(Task task, Long section_id) {
 
         if (section_id == null) {
             throw new IllegalArgumentException("A Task must belong to a Section.");
@@ -38,20 +34,20 @@ public class TaskService {
 
         Task savedTask = taskRepository.save(task);
 
-        return convertToDto(savedTask);
+        convertTaskToDto(savedTask);
     }
 
     public TaskDTO getTaskById(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
-        return convertToDto(task);
+        return convertTaskToDto(task);
     }
 
     public List<TaskDTO> getAllTasksBySection(Long sectionId) {
         Section section = sectionRepository.findById(sectionId)
                 .orElseThrow(() -> new RuntimeException("Section not found"));
         return section.getTasks().stream()
-                .map(this::convertToDto)
+                .map(this::convertTaskToDto)
                 .collect(Collectors.toList());
     }
 
@@ -62,7 +58,7 @@ public class TaskService {
         task.setDescription(taskDetails.getDescription());
         task.setCompleted(taskDetails.isCompleted());
         Task updatedTask = taskRepository.save(task);
-        return convertToDto(updatedTask);
+        return convertTaskToDto(updatedTask);
     }
 
     public TaskDTO toggleTaskCompletion(Long id) {
@@ -70,7 +66,7 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found"));
         task.setCompleted(!task.isCompleted());
         Task updatedTask = taskRepository.save(task);
-        return convertToDto(updatedTask);
+        return convertTaskToDto(updatedTask);
     }
 
     public void deleteTask(Long id) {
@@ -80,7 +76,7 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
-    private TaskDTO convertToDto(Task taskEntity) {
+    private TaskDTO convertTaskToDto(Task taskEntity) {
         TaskDTO dto = new TaskDTO();
         dto.setId(taskEntity.getId());
         dto.setTitle(taskEntity.getTitle());

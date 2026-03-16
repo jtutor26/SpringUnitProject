@@ -1,4 +1,3 @@
-
 package com.example.unitprojectspring.Service;
 import com.example.unitprojectspring.DTO.UserDTO;
 import com.example.unitprojectspring.DTO.UserRegistrationDTO;
@@ -42,13 +41,13 @@ public class UserService {
         // 5. Save the user to the database
         userRepository.save(newUser);
 
-        return convertToDto(newUser);
+        return convertUserToDto(newUser);
     }
 
     public UserDTO getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        return convertToDto(user);
+        return convertUserToDto(user);
     }
 
     public User getUserFromPrincipal(String loginInput) {
@@ -58,7 +57,7 @@ public class UserService {
 
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(this::convertToDto)
+                .map(this::convertUserToDto)
                 .collect(Collectors.toList());
     }
 
@@ -73,7 +72,7 @@ public class UserService {
         }
 
         userRepository.save(user);
-        return convertToDto(user);
+        return convertUserToDto(user);
     }
 
     public void deleteUser(Long id) {
@@ -84,7 +83,7 @@ public class UserService {
     }
 
 
-    public UserDTO convertToDto(User userEntity) {
+    public UserDTO convertUserToDto(User userEntity) {
         UserDTO dto = new UserDTO();
         dto.setUsername(userEntity.getUsername());
         dto.setEmail(userEntity.getEmail());

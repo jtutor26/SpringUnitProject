@@ -55,11 +55,15 @@ public class HomeController {
     }
 
     @PostMapping("/add")
-    public String addProject(@ModelAttribute Project newproject, Principal principal){
-        User currentUser = userService.getUserFromPrincipal(principal.getName());
-        projectService.createProject(newproject, currentUser.getId());
+    public String addProject(
+            @ModelAttribute Project newproject,
+            @RequestParam("sectionTitle") String sectionTitle, // <--- Catches the new HTML input
+            Principal principal) {
 
-        // FIXED: Redirect back to the GET mapping to reload the data!
+        User currentUser = userService.getUserFromPrincipal(principal.getName());
+
+        projectService.createProjectWithSection(newproject, sectionTitle, currentUser.getId());
+
         return "redirect:/api/dashboard";
     }
 }

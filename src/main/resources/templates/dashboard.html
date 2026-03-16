@@ -23,13 +23,18 @@
 
     <div class="bg-white p-6 rounded-lg shadow-md mb-8">
         <h2 class="text-xl font-semibold mb-4 text-gray-700">Add New Project</h2>
-        <form th:action="@{/api/dashboard/add}" method="POST" class="flex flex-wrap gap-4">
+
+        <form th:action="@{/api/dashboard/add}" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
             <input type="text" name="title" placeholder="Project Title" required
-                   class="flex-1 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+                   class="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
 
             <input type="text" name="description" placeholder="Short Description"
-                   class="flex-1 border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+                   class="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+            <input type="text" name="sectionTitle" placeholder="First Section (e.g. 'To Do')" required
+                   class="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+
             <button type="submit"
                     class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded transition duration-200">
                 Add Project
