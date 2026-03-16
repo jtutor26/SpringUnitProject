@@ -21,7 +21,7 @@
         </div>
 
         <a th:href="@{/users/profile}" class="bg-[#333333] hover:bg-[#FF5733] text-white font-bold py-2.5 px-6 rounded-sm shadow-[4px_4px_0px_0px_rgba(255,195,0,1)] transition duration-200 text-sm uppercase tracking-widest">
-            Engineer Profile
+            Conductor Profile
         </a>
     </div>
 </div>
@@ -66,7 +66,6 @@
     <table class="min-w-full bg-white">
         <thead class="bg-[#333333] text-[#FFC300]">
         <tr>
-            <th class="py-4 px-6 text-left uppercase font-black text-xs tracking-[0.2em]">Unit ID</th>
             <th class="py-4 px-6 text-left uppercase font-black text-xs tracking-[0.2em]">Operational Route</th>
             <th class="py-4 px-6 text-left uppercase font-black text-xs tracking-[0.2em]">Switch (Actions)</th>
         </tr>
@@ -80,7 +79,6 @@
         </tr>
 
         <tr th:each="project : ${projects}" class="border-b border-slate-200 hover:bg-[#FFC300]/10 transition-colors duration-150">
-            <td class="py-5 px-6 font-mono text-sm font-bold text-slate-400" th:text="'ID_' + ${project.id}">ID_1</td>
 
             <td class="py-5 px-6">
                 <a th:href="@{/api/dashboard/project/{id}(id=${project.id})}"
