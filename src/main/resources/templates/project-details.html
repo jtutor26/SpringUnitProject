@@ -83,13 +83,13 @@
 
 <div class="caution-tape shadow-[0_4px_0_0_#1c1917] z-10 relative flex-shrink-0"></div>
 
-<div class="flex-grow flex items-start space-x-6 overflow-x-auto p-6 sm:p-8 bg-stone-300 relative z-0">
+<div class="flex-grow flex items-stretch space-x-6 overflow-x-auto p-6 sm:p-8 bg-stone-300 relative z-0 min-h-0">
 
-    <div th:each="section : ${project.sections}" class="bg-stone-100 border-4 border-[#333333] shadow-[6px_6px_0_0_#1c1917] p-4 min-w-[320px] w-80 flex-shrink-0 max-h-full flex flex-col relative group">
+    <div th:each="section : ${project.sections}" class="bg-stone-100 border-4 border-[#333333] shadow-[6px_6px_0_0_#1c1917] p-4 min-w-[320px] w-80 flex-shrink-0 flex flex-col relative group">
 
         <div class="absolute -left-6 top-1/2 w-6 border-y-4 border-[#333333] rail-track h-4 opacity-50 z-[-1]"></div>
 
-        <div class="flex justify-between items-center mb-4 px-1 pb-2 border-b-4 border-[#333333] bg-[#333333] p-2 -mx-4 -mt-4 text-[#FFC300] relative">
+        <div class="flex justify-between items-center mb-4 px-1 pb-2 border-b-4 border-[#333333] bg-[#333333] p-2 -mx-4 -mt-4 text-[#FFC300] relative flex-shrink-0">
             <h2 class="text-sm font-black uppercase tracking-widest flex items-center gap-2 w-full">
                 <a th:href="@{/sections/{id}(id=${section.id})}" class="hover:text-white transition-colors truncate pl-2" th:text="${section.title}">Car Name</a>
                 <span class="ml-auto bg-[#FFC300] text-[#333333] py-1 px-3 text-xs font-mono border-2 border-[#333333]" th:text="${section.tasks != null ? section.tasks.size() : '0'}">0</span>
@@ -102,7 +102,7 @@
             </form>
         </div>
 
-        <div class="space-y-4 overflow-y-auto flex-grow pr-2 pb-2 custom-scroll mt-2">
+        <div class="space-y-4 overflow-y-auto flex-grow pr-2 pb-2 custom-scroll mt-2 min-h-0">
 
             <div th:each="task : ${section.tasks}" class="bg-white p-4 border-2 border-[#333333] shadow-[4px_4px_0_0_#1c1917] hover:translate-y-px hover:translate-x-px hover:shadow-[2px_2px_0_0_#1c1917] transition-all relative">
 
@@ -150,7 +150,7 @@
 
         </div>
 
-        <div class="pt-4 mt-2 border-t-4 border-[#333333]">
+        <div class="pt-4 mt-auto border-t-4 border-[#333333] flex-shrink-0">
             <a th:href="@{/sections/{id}(id=${section.id})}" class="flex items-center justify-center text-xs font-black uppercase tracking-widest text-[#333333] border-2 border-[#333333] bg-[#FFC300] hover:bg-[#FF5733] hover:text-white py-3 shadow-[4px_4px_0_0_#1c1917] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all w-full">
                 Inspect Cargo &rarr;
             </a>
@@ -158,10 +158,10 @@
 
     </div>
 
-    <div class="min-w-[320px] w-80 flex-shrink-0 relative">
+    <div class="min-w-[320px] w-80 flex-shrink-0 relative flex flex-col">
         <div class="absolute -left-6 top-1/2 w-6 border-y-4 border-[#333333] rail-track h-4 opacity-50 z-[-1]"></div>
 
-        <form th:action="@{/sections/project/{projectId}/add(projectId=${project.id})}" method="POST" class="bg-stone-200 border-4 border-dashed border-[#333333] hover:border-[#FF5733] hover:bg-[#FFC300]/20 transition-all duration-200 p-6 flex flex-col items-center justify-center h-full min-h-[200px] group">
+        <form th:action="@{/sections/project/{projectId}/add(projectId=${project.id})}" method="POST" class="flex-grow bg-stone-200 border-4 border-dashed border-[#333333] hover:border-[#FF5733] hover:bg-[#FFC300]/20 transition-all duration-200 p-6 flex flex-col items-center justify-center group">
             <svg class="w-8 h-8 mb-4 text-[#333333] group-hover:text-[#FF5733] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="square" d="M12 4v16m8-8H4"></path></svg>
             <input type="text" name="title" placeholder="HITCH NEW CAR" required
                    class="w-full bg-white border-2 border-[#333333] p-3 text-center text-xs font-black uppercase tracking-widest placeholder-[#333333]/50 focus:outline-none focus:ring-4 focus:ring-[#FFC300] shadow-inner text-[#333333]">
@@ -171,14 +171,14 @@
 
 </div>
 
-<div class="caution-tape mt-10"></div>
-<footer class="bg-[#333333] border-t-8 border-[#1a1a1a] py-8 flex-shrink-0">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="caution-tape flex-shrink-0"></div>
+<footer class="bg-[#333333] border-t-8 border-[#1a1a1a] py-6 flex-shrink-0">
+    <div class="max-w-full mx-auto px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="text-xs font-black uppercase tracking-[0.3em] text-stone-400">
             &copy; 2026 Junction Transit Authority | Water Valley, MS
         </div>
         <div class="flex gap-6 text-[10px] font-black uppercase tracking-widest text-[#FFC300]">
-            <span>Yard Status: Online</span>
+            <span>Line Status: Monitored</span>
             <span>System: v4.0.3</span>
         </div>
     </div>

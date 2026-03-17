@@ -45,6 +45,13 @@ public class ProjectService {
     }
 
     @Transactional
+    public List<ProjectDTO> getProjectByTitle(String title) {
+        return projectRepository.findByTitle(title).stream()
+                .map(this::convertProjectToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public ProjectDTO getProjectById(Long id) {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Project not found"));

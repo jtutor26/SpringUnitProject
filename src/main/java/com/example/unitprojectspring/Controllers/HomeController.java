@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/api/dashboard")
@@ -27,6 +28,20 @@ public class HomeController {
         User currentUser = userService.getUserFromPrincipal(principal.getName());
         List<ProjectDTO> projects = projectService.getAllProjectsWithUserId(currentUser.getId());
         model.addAttribute("projects", projects);
+        return "dashboard";
+    }
+
+    @GetMapping("/search")
+    public String searchProject(@RequestParam("title") String title, Model model, Principal principal) {
+
+        String lowerCaseSearchTitle = title.toLowerCase();
+
+        List<ProjectDTO> searchedProjects = projectService.getProjectByTitle(lowerCaseSearchTitle);
+
+        model.addAttribute("projects", Objects.requireNonNullElseGet(searchedProjects, List::of));
+
+        model.addAttribute("searchTitle", title);
+
         return "dashboard";
     }
 
@@ -57,8 +72,12 @@ public class HomeController {
     @PostMapping("/add")
     public String addProject(
             @ModelAttribute Project newproject,
-            @RequestParam("sectionTitle") String sectionTitle, // <--- Catches the new HTML input
+            @RequestParam("sectionTitle") String sectionTitle,
             Principal principal) {
+
+        if (newproject.getTitle() != null) {
+            newproject.setTitle(newproject.getTitle().toLowerCase());
+        }
 
         User currentUser = userService.getUserFromPrincipal(principal.getName());
 
